@@ -1,0 +1,38 @@
+//
+//  {{ module_info.name }}{{ module_info.file_name }}
+//  {{ module_info.project_name }}
+//
+//  Created by {{ developer.name }} on {{ date }}.
+//  Copyright © {{ year }} {{ developer.company }}. All rights reserved.
+//
+
+import UIKit
+import RxCocoa
+import RxSwift
+
+final class {{ module_info.name }}ViewController: UIViewController {
+
+    // MARK: - Outlets
+
+    // MARK: - Public
+    func setPresenter(_ presenter: {{ module_info.name }}PresenterProtocol) {
+        self.presenter = presenter
+    }
+
+    // MARK: - Life cycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        presenter?.setupBindings(self)
+    }
+
+    // MARK: - Private
+    private var presenter: {{ module_info.name }}PresenterProtocol?
+}
+
+// MARK: - {{ module_info.name }}ViewInput
+extension {{ module_info.name }}ViewController: {{ module_info.name }}ViewProtocol {
+
+    func setupInitialState() {
+    }
+}
+
