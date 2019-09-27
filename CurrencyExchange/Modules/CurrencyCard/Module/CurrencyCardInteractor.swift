@@ -1,5 +1,5 @@
 //
-//  ConverterConverterViewProtocol.swift
+//  CurrencyCardCurrencyCardInteractor.swift
 //  CurrencyExchange
 //
 //  Created by Sergey V. Krupov on 27/09/2019.
@@ -9,9 +9,10 @@
 import RxCocoa
 import RxSwift
 
-protocol ConverterViewProtocol: class {
+protocol CurrencyCardInteractorProtocol: class {
 
-    // MARK: - Input
+}
 
-    // MARK: - Output
+final class CurrencyCardInteractor: CurrencyCardInteractorProtocol {
+
 }

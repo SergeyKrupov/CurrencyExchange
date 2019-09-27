@@ -9,6 +9,11 @@
 import RxCocoa
 import RxSwift
 
+protocol ConverterPresenterProtocol {
+
+    func setupBindings(_ view: ConverterViewProtocol)
+}
+
 final class ConverterPresenter {
 
     // MARK: - Properties

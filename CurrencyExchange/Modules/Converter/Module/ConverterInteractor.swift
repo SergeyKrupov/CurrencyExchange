@@ -9,6 +9,10 @@
 import RxCocoa
 import RxSwift
 
+protocol ConverterInteractorProtocol: class {
+
+}
+
 final class ConverterInteractor: ConverterInteractorProtocol {
 
     // MARK: - Dependencies

@@ -12,11 +12,12 @@ extension SwinjectStoryboard {
 
     @objc
     class func setup() {
-
         ExchangeRatesServiceAssembly().assemble(container: defaultContainer)
+        CardsContainerAssembly().assemble(container: defaultContainer)
+        ConverterAssembly().assemble(container: defaultContainer)
+        CurrencyCardAssembly().assemble(container: defaultContainer)
 
-        defaultContainer.storyboardInitCompleted(ViewController.self) { resolver, viewController in
-            viewController.service = resolver.resolve(ExchangeRatesService.self)!
+        defaultContainer.storyboardInitCompleted(UINavigationController.self) { _, _ in
         }
     }
 }
