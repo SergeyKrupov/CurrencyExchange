@@ -23,12 +23,6 @@ struct CardsContainerOutput {
 
 protocol CardsContainerInterface: class {
 
-    // Выбранная валюта (выход)
-    var currency: Driver<Currency> { get }
-    // Введённое число (вход-выход)
-    var amount: PublishRelay<Double> { get }
-
     var input: AnyObserver<CardsContainerInput> { get }
-
     var output: Observable<CardsContainerOutput> { get }
 }

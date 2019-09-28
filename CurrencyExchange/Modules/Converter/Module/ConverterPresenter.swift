@@ -31,29 +31,20 @@ final class ConverterPresenter {
 extension ConverterPresenter: ConverterPresenterProtocol {
 
     func setupBindings(_ view: ConverterViewProtocol) {
-
-        let currencies: [Currency] = [.usd, .gbp, .eur]
-
-        var rates: [Rate] = []
-        var value: Double = 1
-        for c1 in currencies {
-            for c2 in currencies {
-                rates.append(Rate(first: c1, second: c2, rate: c1 == c2 ? 1 : value))
-                value += 0.15
-            }
-        }
-
-        let data = CardsContainerInput(
-            balance: [.usd: 100, .gbp: 200, .eur: 300],
-            rates: rates,
-            counterpart: .usd,
-            amount: nil
-        )
-        firstContainerInterface.input.on(.next(data))
-
         firstContainerInterface.output
-            .debug()
-            .subscribe()
+            .subscribe(interactor.firstContainerOutput)
+            .disposed(by: disposeBag)
+
+        interactor.firstInput
+            .bind(to: firstContainerInterface.input)
+            .disposed(by: disposeBag)
+
+        secondContainerInterface.output
+            .subscribe(interactor.secondContainerOutput)
+            .disposed(by: disposeBag)
+
+        interactor.secondInput
+            .bind(to: secondContainerInterface.input)
             .disposed(by: disposeBag)
     }
 }

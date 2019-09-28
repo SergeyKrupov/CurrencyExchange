@@ -75,20 +75,22 @@ final class CardsContainerInteractor: CardsContainerInteractorProtocol {
     private func bindModuleInput(_ module: CurrencyCardModule) {
         let currency = module.interface.currency
 
-        let balance = inputSubject
+        inputSubject
             .flatMap { data in Observable.from(optional: data.balance[currency]) }
+            .bind(to: module.interface.balance)
+            .disposed(by: disposeBag)
 
-        let rate = inputSubject
+        inputSubject
             .flatMap { data -> Observable<Rate> in
                 let rate = data.rates.first { $0.first == currency && $0.second == data.counterpart }
                 return Observable.from(optional: rate)
             }
+            .bind(to: module.interface.rate)
+            .disposed(by: disposeBag)
 
-        let amount = inputSubject
+        inputSubject
             .flatMap { Observable.from(optional: $0.amount) }
-
-        Observable.combineLatest(amount, balance, rate, resultSelector: CurrencyCardInput.init)
-            .bind(to: module.interface.input)
+            .bind(to: module.interface.amount)
             .disposed(by: disposeBag)
     }
 

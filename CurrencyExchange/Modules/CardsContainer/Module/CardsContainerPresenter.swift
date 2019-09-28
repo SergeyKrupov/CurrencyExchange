@@ -25,18 +25,12 @@ final class CardsContainerPresenter: CardsContainerInterface {
     weak var view: CardsContainerViewProtocol?
 
     // MARK: - CardsContainerModuleInput
-    private(set) lazy var currency: Driver<Currency> = currencyRelay.asDriver()
-    let amount = PublishRelay<Double>()
     var input: AnyObserver<CardsContainerInput> {
         return interactor.input
     }
     var output: Observable<CardsContainerOutput> {
         return interactor.output
     }
-
-    // MARK: - Private
-    private let currencyRelay = BehaviorRelay<Currency>(value: .eur)
-    private let inputDataSubject = ReplaySubject<CardsContainerInput>.create(bufferSize: 1)
 
     // MARK: - Private
     private let disposeBag = DisposeBag()

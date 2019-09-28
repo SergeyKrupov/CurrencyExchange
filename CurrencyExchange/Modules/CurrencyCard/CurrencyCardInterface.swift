@@ -9,12 +9,6 @@
 import RxCocoa
 import RxSwift
 
-struct CurrencyCardInput {
-    let amount: Double
-    let balance: Double
-    let rate: Rate
-}
-
 struct CurrencyCardOutput {
     let amount: Double
 }
@@ -22,6 +16,8 @@ struct CurrencyCardOutput {
 protocol CurrencyCardInterface: class {
 
     var currency: Currency { get }
-    var input: AnyObserver<CurrencyCardInput> { get }
+    var amount: AnyObserver<Double> { get }
+    var balance: AnyObserver<Double> { get }
+    var rate: AnyObserver<Rate> { get }
     var output: Observable<CurrencyCardOutput> { get }
 }

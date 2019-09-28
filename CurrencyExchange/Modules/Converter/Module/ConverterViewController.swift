@@ -27,10 +27,14 @@ final class ConverterViewController: UIViewController {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         presenter?.setupBindings(self)
 
         navigationItem.title = "Converter"
+    }
 
+    // MARK: - Private
+    private func setupUI() {
         firstContainer.willMove(toParent: self)
         stackView.addArrangedSubview(firstContainer.view)
         addChild(firstContainer)

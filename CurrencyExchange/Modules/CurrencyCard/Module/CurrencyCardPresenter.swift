@@ -28,8 +28,16 @@ final class CurrencyCardPresenter: CurrencyCardInterface {
     // MARK: - CurrencyCardModuleInput
     let currency: Currency
 
-    var input: AnyObserver<CurrencyCardInput> {
-        return AnyObserver(inputSubject)
+    var amount: AnyObserver<Double> {
+        return AnyObserver(amountSubject)
+    }
+
+    var balance: AnyObserver<Double> {
+        return AnyObserver(balanceSubject)
+    }
+
+    var rate: AnyObserver<Rate> {
+        return AnyObserver(rateSubject)
     }
 
     var output: Observable<CurrencyCardOutput> {
@@ -38,7 +46,9 @@ final class CurrencyCardPresenter: CurrencyCardInterface {
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
-    private let inputSubject = ReplaySubject<CurrencyCardInput>.create(bufferSize: 1)
+    private let amountSubject = ReplaySubject<Double>.create(bufferSize: 1)
+    private let balanceSubject = ReplaySubject<Double>.create(bufferSize: 1)
+    private let rateSubject = ReplaySubject<Rate>.create(bufferSize: 1)
     private let outputSubject = PublishSubject<CurrencyCardOutput>()
 }
 
@@ -64,14 +74,19 @@ extension CurrencyCardPresenter: CurrencyCardPresenterProtocol {
             .bind(to: outputSubject)
             .disposed(by: disposeBag)
 
-        inputSubject
-            .map { [currency] in String(format: "Balance: %@%0.2f", currency.symbol, $0.balance) }
+        balanceSubject
+            .map { [currency] in String(format: "Balance: %@%0.2f", currency.symbol, $0) }
             .bind(to: view.balanceText)
             .disposed(by: disposeBag)
 
-        inputSubject
-            .map { $0.rate.toString() }
+        rateSubject
+            .map { $0.toString() }
             .bind(to: view.rateText)
+            .disposed(by: disposeBag)
+
+        amountSubject
+            .map { String(format: "%0.2f", $0) }
+            .bind(to: view.amountText)
             .disposed(by: disposeBag)
     }
 }
