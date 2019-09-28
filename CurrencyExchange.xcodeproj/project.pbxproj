@@ -19,11 +19,12 @@
 		A57B7C50233E9340005D1EC2 /* CurrencyCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57B7C4A233E9340005D1EC2 /* CurrencyCardViewController.swift */; };
 		A57B7C51233E9340005D1EC2 /* CurrencyCardInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57B7C4B233E9340005D1EC2 /* CurrencyCardInteractor.swift */; };
 		A57B7C52233E9340005D1EC2 /* CurrencyCardRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57B7C4C233E9340005D1EC2 /* CurrencyCardRouter.swift */; };
-		A57B7C54233E9340005D1EC2 /* CurrencyCardModuleInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57B7C4E233E9340005D1EC2 /* CurrencyCardModuleInput.swift */; };
+		A57B7C54233E9340005D1EC2 /* CurrencyCardInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57B7C4E233E9340005D1EC2 /* CurrencyCardInterface.swift */; };
 		A58BE7D1233E64CB004DAB62 /* DI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58BE7D0233E64CB004DAB62 /* DI.swift */; };
 		A5BC086A233E937100F017C5 /* CurrencyCardAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BC0869233E937100F017C5 /* CurrencyCardAssembly.swift */; };
 		A5BC086C233E93E400F017C5 /* CurrencyCardModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BC086B233E93E400F017C5 /* CurrencyCardModule.swift */; };
 		A5BC086E233E944400F017C5 /* CurrencyCardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A5BC086D233E944400F017C5 /* CurrencyCardViewController.xib */; };
+		A5CA9085233F61D60083D80C /* Rate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA9084233F61D60083D80C /* Rate.swift */; };
 		A5CC795D233E3C5A004DD4A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CC795C233E3C5A004DD4A2 /* AppDelegate.swift */; };
 		A5CC795F233E3C5A004DD4A2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CC795E233E3C5A004DD4A2 /* SceneDelegate.swift */; };
 		A5CC7961233E3C5A004DD4A2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CC7960233E3C5A004DD4A2 /* ViewController.swift */; };
@@ -41,13 +42,13 @@
 		C5C547E85D3D0129603BB44F /* ConverterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDEA78B0771E76B8E1E17595 /* ConverterInteractor.swift */; };
 		CDF2AD32CC3A134F77DF0D99 /* CardsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B45335B4577884B3DA7E54 /* CardsContainerViewController.swift */; };
 		D33DFE9DD20F4BABC0F2A6E4 /* CardsContainerInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420F7FD2157946A37B9114AD /* CardsContainerInteractor.swift */; };
-		E61C4D297FC1B2741C6B34AC /* CardsContainerModuleInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC34847E22AEBA6AF24FAB /* CardsContainerModuleInput.swift */; };
+		E61C4D297FC1B2741C6B34AC /* CardsContainerInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC34847E22AEBA6AF24FAB /* CardsContainerInterface.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0A7A396828A7A7131A01A268 /* CardsContainerRouter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CardsContainerRouter.swift; sourceTree = "<group>"; };
 		10B676613700183D3BD18B7C /* ConverterModuleInput.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConverterModuleInput.swift; sourceTree = "<group>"; };
-		1AAC34847E22AEBA6AF24FAB /* CardsContainerModuleInput.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CardsContainerModuleInput.swift; sourceTree = "<group>"; };
+		1AAC34847E22AEBA6AF24FAB /* CardsContainerInterface.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CardsContainerInterface.swift; sourceTree = "<group>"; };
 		31E030ECD27AB22FE96F262C /* Pods-CurrencyExchange.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CurrencyExchange.release.xcconfig"; path = "Target Support Files/Pods-CurrencyExchange/Pods-CurrencyExchange.release.xcconfig"; sourceTree = "<group>"; };
 		420F7FD2157946A37B9114AD /* CardsContainerInteractor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CardsContainerInteractor.swift; sourceTree = "<group>"; };
 		49C7A715EBB11EEF895A3933 /* ConverterAssembly.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ConverterAssembly.swift; sourceTree = "<group>"; };
@@ -60,11 +61,12 @@
 		A57B7C4A233E9340005D1EC2 /* CurrencyCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyCardViewController.swift; sourceTree = "<group>"; };
 		A57B7C4B233E9340005D1EC2 /* CurrencyCardInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyCardInteractor.swift; sourceTree = "<group>"; };
 		A57B7C4C233E9340005D1EC2 /* CurrencyCardRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyCardRouter.swift; sourceTree = "<group>"; };
-		A57B7C4E233E9340005D1EC2 /* CurrencyCardModuleInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyCardModuleInput.swift; sourceTree = "<group>"; };
+		A57B7C4E233E9340005D1EC2 /* CurrencyCardInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyCardInterface.swift; sourceTree = "<group>"; };
 		A58BE7D0233E64CB004DAB62 /* DI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DI.swift; sourceTree = "<group>"; };
 		A5BC0869233E937100F017C5 /* CurrencyCardAssembly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyCardAssembly.swift; sourceTree = "<group>"; };
 		A5BC086B233E93E400F017C5 /* CurrencyCardModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyCardModule.swift; sourceTree = "<group>"; };
 		A5BC086D233E944400F017C5 /* CurrencyCardViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CurrencyCardViewController.xib; sourceTree = "<group>"; };
+		A5CA9084233F61D60083D80C /* Rate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rate.swift; sourceTree = "<group>"; };
 		A5CC7959233E3C5A004DD4A2 /* CurrencyExchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurrencyExchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5CC795C233E3C5A004DD4A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5CC795E233E3C5A004DD4A2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				A5CC797C233E5B6D004DD4A2 /* Currency.swift */,
 				A5CC797E233E5B90004DD4A2 /* RatesResponse.swift */,
 				A5CC7980233E60A4004DD4A2 /* RatesError.swift */,
+				A5CA9084233F61D60083D80C /* Rate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -246,7 +249,7 @@
 			children = (
 				A5BC0869233E937100F017C5 /* CurrencyCardAssembly.swift */,
 				A5BC086B233E93E400F017C5 /* CurrencyCardModule.swift */,
-				A57B7C4E233E9340005D1EC2 /* CurrencyCardModuleInput.swift */,
+				A57B7C4E233E9340005D1EC2 /* CurrencyCardInterface.swift */,
 				A57B7C48233E9340005D1EC2 /* Module */,
 			);
 			path = CurrencyCard;
@@ -257,7 +260,7 @@
 			children = (
 				852651C7B964CBD3E295A230 /* CardsContainerAssembly.swift */,
 				A553282F233E858A007E6BED /* CardsContainerModule.swift */,
-				1AAC34847E22AEBA6AF24FAB /* CardsContainerModuleInput.swift */,
+				1AAC34847E22AEBA6AF24FAB /* CardsContainerInterface.swift */,
 				A5532831233E8598007E6BED /* Module */,
 			);
 			path = CardsContainer;
@@ -401,6 +404,7 @@
 				A5CC7974233E531F004DD4A2 /* ExchangeRatesService.swift in Sources */,
 				A5CC7981233E60A4004DD4A2 /* RatesError.swift in Sources */,
 				A5CC7976233E5347004DD4A2 /* ExchangeRatesServiceAssembly.swift in Sources */,
+				A5CA9085233F61D60083D80C /* Rate.swift in Sources */,
 				A5CC7961233E3C5A004DD4A2 /* ViewController.swift in Sources */,
 				A5CC795D233E3C5A004DD4A2 /* AppDelegate.swift in Sources */,
 				A5CC797F233E5B90004DD4A2 /* RatesResponse.swift in Sources */,
@@ -408,7 +412,7 @@
 				A5CC797D233E5B6D004DD4A2 /* Currency.swift in Sources */,
 				A5BC086A233E937100F017C5 /* CurrencyCardAssembly.swift in Sources */,
 				A58BE7D1233E64CB004DAB62 /* DI.swift in Sources */,
-				A57B7C54233E9340005D1EC2 /* CurrencyCardModuleInput.swift in Sources */,
+				A57B7C54233E9340005D1EC2 /* CurrencyCardInterface.swift in Sources */,
 				A5CC7978233E5770004DD4A2 /* ExchangeRateAPI.swift in Sources */,
 				B2B448922BE7A3336CB6C188 /* ConverterAssembly.swift in Sources */,
 				A57B7C50233E9340005D1EC2 /* CurrencyCardViewController.swift in Sources */,
@@ -424,7 +428,7 @@
 				A57B7C51233E9340005D1EC2 /* CurrencyCardInteractor.swift in Sources */,
 				05060533BBA7EEE64D98866E /* CardsContainerAssembly.swift in Sources */,
 				CDF2AD32CC3A134F77DF0D99 /* CardsContainerViewController.swift in Sources */,
-				E61C4D297FC1B2741C6B34AC /* CardsContainerModuleInput.swift in Sources */,
+				E61C4D297FC1B2741C6B34AC /* CardsContainerInterface.swift in Sources */,
 				06A8C99DC386EE7FEFE59528 /* CardsContainerPresenter.swift in Sources */,
 				D33DFE9DD20F4BABC0F2A6E4 /* CardsContainerInteractor.swift in Sources */,
 				728E30939109646CF24AA92A /* CardsContainerRouter.swift in Sources */,

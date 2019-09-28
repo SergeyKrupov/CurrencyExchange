@@ -12,7 +12,9 @@ import UIKit
 
 protocol CurrencyCardViewProtocol: class {
 
-    var amountText: Driver<String> { get }
+    var balanceText: Binder<String?> { get }
+    var rateText: Binder<String?> { get }
+    var amountText: ControlProperty<String> { get }
 
     func setCurrencyName(_ name: String)
     func setAmountColor(_ color: UIColor)
@@ -23,6 +25,9 @@ final class CurrencyCardViewController: UIViewController {
     // MARK: - Outlets
     @IBOutlet private var currencyLabel: UILabel!
     @IBOutlet private var amountTextField: UITextField!
+    @IBOutlet private var balanceLabel: UILabel!
+    @IBOutlet private var rateLabel: UILabel!
+    @IBOutlet private var containerView: UIView!
 
     // MARK: - Injected properties
     var presenter: CurrencyCardPresenterProtocol!
@@ -30,18 +35,35 @@ final class CurrencyCardViewController: UIViewController {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         presenter.setupBindings(self)
     }
 
     // MARK: - Private
+    private func setupUI() {
+        containerView.backgroundColor = .white
+
+        let layer = containerView.layer
+        layer.borderColor = UIColor.lightGray.cgColor
+        layer.shadowOpacity = 0.8
+        layer.shadowRadius = 3
+        layer.shadowOffset = CGSize(width: 2, height: 2)
+    }
 }
 
 // MARK: - CurrencyCardViewInput
 extension CurrencyCardViewController: CurrencyCardViewProtocol {
 
-    var amountText: Driver<String> {
-        //FIXME: stored property
-        return amountTextField.rx.text.orEmpty.asDriver()
+    var balanceText: Binder<String?> {
+        return balanceLabel.rx.text
+    }
+
+    var rateText: Binder<String?> {
+        return rateLabel.rx.text
+    }
+
+    var amountText: ControlProperty<String> {
+        return amountTextField.rx.text.orEmpty
     }
 
     func setCurrencyName(_ name: String) {

@@ -11,3 +11,17 @@ enum Currency: String, CaseIterable {
     case usd = "USD"
     case gbp = "GBP"
 }
+
+extension Currency {
+
+    var symbol: String {
+        switch self {
+        case .eur:
+            return "€"
+        case .usd:
+            return "$"
+        case .gbp:
+            return "£"
+        }
+    }
+}

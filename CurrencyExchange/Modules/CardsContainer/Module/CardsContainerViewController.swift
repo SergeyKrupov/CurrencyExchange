@@ -37,6 +37,7 @@ final class CardsContainerViewController: UIPageViewController, CardsContainerVi
     // MARK: - Private
     private func setupUI() {
         dataSource = self
+        delegate = self
     }
 }
 
@@ -50,5 +51,15 @@ extension CardsContainerViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerAfter viewController: UIViewController) -> UIViewController? {
         return presenter.viewController(after: viewController)
+    }
+}
+
+extension CardsContainerViewController: UIPageViewControllerDelegate {
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            didFinishAnimating finished: Bool,
+                            previousViewControllers: [UIViewController],
+                            transitionCompleted completed: Bool) {
+        presenter.didSwitchTo(viewController: pageViewController.viewControllers?.first)
     }
 }

@@ -14,19 +14,32 @@ protocol CurrencyCardPresenterProtocol {
     func setupBindings(_ view: CurrencyCardViewProtocol)
 }
 
-final class CurrencyCardPresenter: CurrencyCardModuleInput {
+final class CurrencyCardPresenter: CurrencyCardInterface {
+
+    init(currency: Currency) {
+        self.currency = currency
+    }
 
     // MARK: - Injected properties
     var interactor: CurrencyCardInteractorProtocol!
     var router: CurrencyCardRouterProtocol!
     weak var view: CurrencyCardViewProtocol?
-    var currency: Currency!
 
     // MARK: - CurrencyCardModuleInput
-    let amount = BehaviorRelay<Double>(value: 0)
+    let currency: Currency
+
+    var input: AnyObserver<CurrencyCardInput> {
+        return AnyObserver(inputSubject)
+    }
+
+    var output: Observable<CurrencyCardOutput> {
+        return outputSubject.asObservable()
+    }
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
+    private let inputSubject = ReplaySubject<CurrencyCardInput>.create(bufferSize: 1)
+    private let outputSubject = PublishSubject<CurrencyCardOutput>()
 }
 
 // MARK: - CurrencyCardPesenterProtocol
@@ -39,15 +52,26 @@ extension CurrencyCardPresenter: CurrencyCardPresenterProtocol {
             .map { Double($0) }
 
         doubleValue
-            .drive(Binder(self) { this, value in
+            .bind(to: Binder(self) { this, value in
                 let color: UIColor = value == nil ? .red : .black
                 this.view?.setAmountColor(color)
             })
             .disposed(by: disposeBag)
 
         doubleValue
-            .flatMap { Driver.from(optional: $0) }
-            .drive(amount)
+            .flatMap { Observable.from(optional: $0) }
+            .map(CurrencyCardOutput.init)
+            .bind(to: outputSubject)
+            .disposed(by: disposeBag)
+
+        inputSubject
+            .map { [currency] in String(format: "Balance: %@%0.2f", currency.symbol, $0.balance) }
+            .bind(to: view.balanceText)
+            .disposed(by: disposeBag)
+
+        inputSubject
+            .map { $0.rate.toString() }
+            .bind(to: view.rateText)
             .disposed(by: disposeBag)
     }
 }

@@ -47,4 +47,3 @@ extension ConverterViewController: ConverterViewProtocol {
     func setupInitialState() {
     }
 }
-

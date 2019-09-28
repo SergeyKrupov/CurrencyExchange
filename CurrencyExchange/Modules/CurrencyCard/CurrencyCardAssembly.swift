@@ -16,18 +16,17 @@ final class CurrencyCardAssembly: Assembly {
             let viewController = CurrencyCardViewController()
             let interactor = CurrencyCardInteractor()
             let router = CurrencyCardRouter()
-            let presenter = CurrencyCardPresenter()
+            let presenter = CurrencyCardPresenter(currency: currency)
 
             presenter.view = viewController
             presenter.interactor = interactor
             presenter.router = router
-            presenter.currency = currency
 
             viewController.presenter = presenter
 
             return CurrencyCardModule(
                 viewController: viewController,
-                input: presenter
+                interface: presenter
             )
         }
         .inObjectScope(.transient)

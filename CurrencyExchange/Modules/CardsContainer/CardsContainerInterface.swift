@@ -9,10 +9,26 @@
 import RxCocoa
 import RxSwift
 
-protocol CardsContainerModuleInput: class {
+struct CardsContainerInput {
+    let balance: [Currency: Double]
+    let rates: [Rate]
+    let counterpart: Currency
+    let amount: Double?
+}
+
+struct CardsContainerOutput {
+    let amount: Double
+    let currency: Currency
+}
+
+protocol CardsContainerInterface: class {
 
     // Выбранная валюта (выход)
     var currency: Driver<Currency> { get }
     // Введённое число (вход-выход)
     var amount: PublishRelay<Double> { get }
+
+    var input: AnyObserver<CardsContainerInput> { get }
+
+    var output: Observable<CardsContainerOutput> { get }
 }

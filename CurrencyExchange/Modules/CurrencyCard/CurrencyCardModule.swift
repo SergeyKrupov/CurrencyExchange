@@ -11,7 +11,7 @@ import UIKit
 
 struct CurrencyCardModule {
     let viewController: UIViewController
-    let input: CurrencyCardModuleInput
+    let interface: CurrencyCardInterface
 }
 
 extension CurrencyCardModule {

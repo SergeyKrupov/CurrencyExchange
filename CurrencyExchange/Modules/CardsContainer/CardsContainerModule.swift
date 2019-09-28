@@ -11,7 +11,7 @@ import UIKit
 
 struct CardsContainerModule {
     let viewController: UIViewController
-    let input: CardsContainerModuleInput
+    let interface: CardsContainerInterface
 }
 
 extension CardsContainerModule {

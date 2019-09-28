@@ -12,18 +12,31 @@ import RxSwift
 protocol CardsContainerPresenterProtocol {
 
     func setupBindings(_ view: CardsContainerViewProtocol)
-
     func viewController(before viewContoller: UIViewController) -> UIViewController?
     func viewController(after viewContoller: UIViewController) -> UIViewController?
+    func didSwitchTo(viewController: UIViewController?)
 }
 
-final class CardsContainerPresenter {
+final class CardsContainerPresenter: CardsContainerInterface {
 
     // MARK: - Injected properties
     var interactor: CardsContainerInteractorProtocol!
     var router: CardsContainerRouterProtocol!
     weak var view: CardsContainerViewProtocol?
-    var modules: [CurrencyCardModule]!
+
+    // MARK: - CardsContainerModuleInput
+    private(set) lazy var currency: Driver<Currency> = currencyRelay.asDriver()
+    let amount = PublishRelay<Double>()
+    var input: AnyObserver<CardsContainerInput> {
+        return interactor.input
+    }
+    var output: Observable<CardsContainerOutput> {
+        return interactor.output
+    }
+
+    // MARK: - Private
+    private let currencyRelay = BehaviorRelay<Currency>(value: .eur)
+    private let inputDataSubject = ReplaySubject<CardsContainerInput>.create(bufferSize: 1)
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
@@ -31,30 +44,23 @@ final class CardsContainerPresenter {
 
 // MARK: - CardsContainerPesenterProtocol
 extension CardsContainerPresenter: CardsContainerPresenterProtocol {
+
     func setupBindings(_ view: CardsContainerViewProtocol) {
-        if let viewController = modules.first?.viewController {
+        if let viewController = interactor.startViewController {
             view.setViewController(viewController)
         }
-    }
 
-    func viewController(before index: Int) -> UIViewController {
-        let newIndex = (index + modules.count - 1) % modules.count
-        return modules[newIndex].viewController
     }
 
     func viewController(before viewContoller: UIViewController) -> UIViewController? {
-        guard let index = modules.firstIndex(where: { $0.viewController === viewContoller }) else {
-            return nil
-        }
-        let nextIndex = (index + modules.count - 1) % modules.count
-        return modules[nextIndex].viewController
+        return interactor.viewController(before: viewContoller)
     }
 
     func viewController(after viewContoller: UIViewController) -> UIViewController? {
-        guard let index = modules.firstIndex(where: { $0.viewController === viewContoller }) else {
-            return nil
-        }
-        let nextIndex = (index + 1) % modules.count
-        return modules[nextIndex].viewController
+        return interactor.viewController(after: viewContoller)
+    }
+
+    func didSwitchTo(viewController: UIViewController?) {
+        interactor.didSwitchTo(viewController: viewController)
     }
 }

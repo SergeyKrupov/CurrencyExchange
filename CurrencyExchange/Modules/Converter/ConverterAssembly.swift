@@ -24,6 +24,8 @@ final class ConverterAssembly: Assembly {
             presenter.view = viewController
             presenter.interactor = interactor
             presenter.router = router
+            presenter.firstContainerInterface = firstContainer.interface
+            presenter.secondContainerInterface = secondContainer.interface
 
             viewController.presenter = presenter
             viewController.firstContainer = firstContainer.viewController

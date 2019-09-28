@@ -13,23 +13,22 @@ final class CardsContainerAssembly: Assembly {
 
     func assemble(container: Container) {
         container.register(CardsContainerModule.self) { resolver -> CardsContainerModule in
-            let viewController = CardsContainerViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
-            let interactor = CardsContainerInteractor()
-            let presenter = CardsContainerPresenter()
-            let router = CardsContainerRouter()
-
             let eurModule = CurrencyCardModule.create(resolver: resolver, currency: .eur)
             let gbpModule = CurrencyCardModule.create(resolver: resolver, currency: .gbp)
             let usdModule = CurrencyCardModule.create(resolver: resolver, currency: .usd)
 
+            let viewController = CardsContainerViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+            let interactor = CardsContainerInteractor(modules: [eurModule, usdModule, gbpModule])
+            let presenter = CardsContainerPresenter()
+            let router = CardsContainerRouter()
+
             presenter.view = viewController
             presenter.interactor = interactor
             presenter.router = router
-            presenter.modules = [eurModule, usdModule, gbpModule]
 
             viewController.presenter = presenter
 
-            return CardsContainerModule(viewController: viewController, input: interactor)
+            return CardsContainerModule(viewController: viewController, interface: presenter)
         }
         .inObjectScope(.transient)
     }
