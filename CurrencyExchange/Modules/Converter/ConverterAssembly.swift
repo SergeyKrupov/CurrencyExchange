@@ -14,8 +14,8 @@ final class ConverterAssembly: Assembly {
     func assemble(container: Container) {
         container.storyboardInitCompleted(ConverterViewController.self) { resolver, viewController in
 
-            let firstContainer = resolver.resolve(CardsContainerModule.self)!
-            let secondContainer = resolver.resolve(CardsContainerModule.self)!
+            let firstContainer = CardsContainerModule.create(resolver: resolver)
+            let secondContainer = CardsContainerModule.create(resolver: resolver)
 
             let interactor = ConverterInteractor()
             let presenter = ConverterPresenter()
@@ -25,7 +25,7 @@ final class ConverterAssembly: Assembly {
             presenter.interactor = interactor
             presenter.router = router
 
-            viewController.setPresenter(presenter)
+            viewController.presenter = presenter
             viewController.firstContainer = firstContainer.viewController
             viewController.secondContainer = secondContainer.viewController
         }

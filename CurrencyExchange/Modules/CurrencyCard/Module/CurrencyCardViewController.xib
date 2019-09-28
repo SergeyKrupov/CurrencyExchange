@@ -9,6 +9,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CurrencyCardViewController" customModule="CurrencyExchange" customModuleProvider="target">
             <connections>
+                <outlet property="amountTextField" destination="DYA-bg-lvP" id="Cho-ak-YXQ"/>
+                <outlet property="currencyLabel" destination="agh-Oo-j6E" id="ie9-z1-tEa"/>
                 <outlet property="view" destination="iN0-l3-epB" id="pRo-nf-joE"/>
             </connections>
         </placeholder>
@@ -17,17 +19,26 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="315"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Карточка валюты" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l3J-l2-Cs7">
-                    <rect key="frame" x="137.5" y="147" width="139" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="USD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="agh-Oo-j6E">
+                    <rect key="frame" x="20" y="15" width="61" height="36"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="Количество" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DYA-bg-lvP">
+                    <rect key="frame" x="234" y="134.5" width="160" height="46"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="160" id="Q2Y-Kx-Pey"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="l3J-l2-Cs7" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="byb-eO-EfM"/>
-                <constraint firstItem="l3J-l2-Cs7" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="gmt-WU-8x8"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="DYA-bg-lvP" secondAttribute="trailing" constant="20" id="TCG-Gb-rau"/>
+                <constraint firstItem="DYA-bg-lvP" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="t8N-nQ-Nep"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>

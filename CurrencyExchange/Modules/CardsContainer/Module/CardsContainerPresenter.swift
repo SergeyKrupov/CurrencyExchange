@@ -13,13 +13,13 @@ protocol CardsContainerPresenterProtocol {
 
     func setupBindings(_ view: CardsContainerViewProtocol)
 
-    func viewController(before index: Int) -> UIViewController
-    func viewController(after index: Int) -> UIViewController
+    func viewController(before viewContoller: UIViewController) -> UIViewController?
+    func viewController(after viewContoller: UIViewController) -> UIViewController?
 }
 
 final class CardsContainerPresenter {
 
-    // MARK: - Properties
+    // MARK: - Injected properties
     var interactor: CardsContainerInteractorProtocol!
     var router: CardsContainerRouterProtocol!
     weak var view: CardsContainerViewProtocol?
@@ -31,18 +31,30 @@ final class CardsContainerPresenter {
 
 // MARK: - CardsContainerPesenterProtocol
 extension CardsContainerPresenter: CardsContainerPresenterProtocol {
+    func setupBindings(_ view: CardsContainerViewProtocol) {
+        if let viewController = modules.first?.viewController {
+            view.setViewController(viewController)
+        }
+    }
 
     func viewController(before index: Int) -> UIViewController {
         let newIndex = (index + modules.count - 1) % modules.count
         return modules[newIndex].viewController
     }
 
-    func viewController(after index: Int) -> UIViewController {
-        let newIndex = (index + 1) % modules.count
-        return modules[newIndex].viewController
+    func viewController(before viewContoller: UIViewController) -> UIViewController? {
+        guard let index = modules.firstIndex(where: { $0.viewController === viewContoller }) else {
+            return nil
+        }
+        let nextIndex = (index + modules.count - 1) % modules.count
+        return modules[nextIndex].viewController
     }
 
-    func setupBindings(_ view: CardsContainerViewProtocol) {
-        view.setViewControllers([modules.first!.viewController])
+    func viewController(after viewContoller: UIViewController) -> UIViewController? {
+        guard let index = modules.firstIndex(where: { $0.viewController === viewContoller }) else {
+            return nil
+        }
+        let nextIndex = (index + 1) % modules.count
+        return modules[nextIndex].viewController
     }
 }

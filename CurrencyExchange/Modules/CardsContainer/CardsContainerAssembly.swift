@@ -12,23 +12,22 @@ import SwinjectStoryboard
 final class CardsContainerAssembly: Assembly {
 
     func assemble(container: Container) {
-
         container.register(CardsContainerModule.self) { resolver -> CardsContainerModule in
-            let viewController = CardsContainerViewController()
+            let viewController = CardsContainerViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
             let interactor = CardsContainerInteractor()
             let presenter = CardsContainerPresenter()
             let router = CardsContainerRouter()
 
-            let eurModule = resolver.resolve(CurrencyCardModule.self)!
-            let gbpModule = resolver.resolve(CurrencyCardModule.self)!
-            let usdModule = resolver.resolve(CurrencyCardModule.self)!
+            let eurModule = CurrencyCardModule.create(resolver: resolver, currency: .eur)
+            let gbpModule = CurrencyCardModule.create(resolver: resolver, currency: .gbp)
+            let usdModule = CurrencyCardModule.create(resolver: resolver, currency: .usd)
 
             presenter.view = viewController
             presenter.interactor = interactor
             presenter.router = router
             presenter.modules = [eurModule, usdModule, gbpModule]
 
-            viewController.setPresenter(presenter)
+            viewController.presenter = presenter
 
             return CardsContainerModule(viewController: viewController, input: interactor)
         }

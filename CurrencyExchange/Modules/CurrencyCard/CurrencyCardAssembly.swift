@@ -12,7 +12,7 @@ import SwinjectStoryboard
 final class CurrencyCardAssembly: Assembly {
 
     func assemble(container: Container) {
-        container.register(CurrencyCardModule.self) { resolver -> CurrencyCardModule in
+        container.register(CurrencyCardModule.self) { (resolver: Resolver, currency: Currency) -> CurrencyCardModule in
             let viewController = CurrencyCardViewController()
             let interactor = CurrencyCardInteractor()
             let router = CurrencyCardRouter()
@@ -21,8 +21,9 @@ final class CurrencyCardAssembly: Assembly {
             presenter.view = viewController
             presenter.interactor = interactor
             presenter.router = router
+            presenter.currency = currency
 
-            viewController.setPresenter(presenter)
+            viewController.presenter = presenter
 
             return CurrencyCardModule(
                 viewController: viewController,

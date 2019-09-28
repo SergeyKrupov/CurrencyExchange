@@ -12,49 +12,43 @@ import UIKit
 
 protocol CardsContainerViewProtocol: class {
 
-    func setViewControllers(_ viewControllers: [UIViewController])
+    func setViewController(_ viewController: UIViewController)
 }
 
 final class CardsContainerViewController: UIPageViewController, CardsContainerViewProtocol {
 
     // MARK: - Outlets
 
-    // MARK: - Public
-    func setPresenter(_ presenter: CardsContainerPresenterProtocol) {
-        self.presenter = presenter
-    }
+    // MARK: - Injected properties
+    var presenter: CardsContainerPresenterProtocol!
 
     // MARK: - CardsContainerViewProtocol
-    func setViewControllers(_ viewControllers: [UIViewController]) {
-        self.setViewControllers(viewControllers, direction: .forward, animated: false)
+    func setViewController(_ viewController: UIViewController) {
+        self.setViewControllers([viewController], direction: .forward, animated: false)
     }
 
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
-        dataSource = self
-
-        presenter?.setupBindings(self)
+        setupUI()
+        presenter!.setupBindings(self)
     }
 
     // MARK: - Private
-    private var presenter: CardsContainerPresenterProtocol?
+    private func setupUI() {
+        dataSource = self
+    }
 }
 
 extension CardsContainerViewController: UIPageViewControllerDataSource {
 
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index = pageViewController.viewControllers?.firstIndex(of: viewController) else {
-            return nil
-        }
-        return presenter?.viewController(before: index)
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        return presenter.viewController(before: viewController)
     }
 
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = pageViewController.viewControllers?.firstIndex(of: viewController) else {
-            return nil
-        }
-        return presenter?.viewController(after: index)
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        return presenter.viewController(after: viewController)
     }
 }

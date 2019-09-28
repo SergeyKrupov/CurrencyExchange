@@ -11,9 +11,6 @@ import RxSwift
 
 protocol CurrencyCardModuleInput: class {
 
-    // Валюта (вход)
-    var currency: AnyObserver<Currency> { get }
-
     // Введённое число (вход-выход)
     var amount: BehaviorRelay<Double> { get }
 }

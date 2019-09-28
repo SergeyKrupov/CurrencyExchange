@@ -16,37 +16,38 @@ protocol CurrencyCardPresenterProtocol {
 
 final class CurrencyCardPresenter: CurrencyCardModuleInput {
 
-    // MARK: - Properties
+    // MARK: - Injected properties
     var interactor: CurrencyCardInteractorProtocol!
     var router: CurrencyCardRouterProtocol!
     weak var view: CurrencyCardViewProtocol?
+    var currency: Currency!
 
     // MARK: - CurrencyCardModuleInput
-    private(set) lazy var currency: AnyObserver<Currency> = AnyObserver(currencySubject)
     let amount = BehaviorRelay<Double>(value: 0)
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
-    private let currencySubject = ReplaySubject<Currency>.create(bufferSize: 1)
-
 }
 
 // MARK: - CurrencyCardPesenterProtocol
 extension CurrencyCardPresenter: CurrencyCardPresenterProtocol {
 
     func setupBindings(_ view: CurrencyCardViewProtocol) {
+        view.setCurrencyName(currency.rawValue)
 
-        currencySubject
-            .subscribe(onNext: { [weak self] currency in
-                switch currency {
-                case .eur:
-                    self?.view?.setBackgroundColor(.red)
-                case .usd:
-                    self?.view?.setBackgroundColor(.green)
-                case .gbp:
-                    self?.view?.setBackgroundColor(.blue)
-                }
+        let doubleValue = view.amountText
+            .map { Double($0) }
+
+        doubleValue
+            .drive(Binder(self) { this, value in
+                let color: UIColor = value == nil ? .red : .black
+                this.view?.setAmountColor(color)
             })
+            .disposed(by: disposeBag)
+
+        doubleValue
+            .flatMap { Driver.from(optional: $0) }
+            .drive(amount)
             .disposed(by: disposeBag)
     }
 }

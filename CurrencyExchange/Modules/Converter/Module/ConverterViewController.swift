@@ -16,16 +16,13 @@ protocol ConverterViewProtocol: class {
 
 final class ConverterViewController: UIViewController {
 
+    // MARK: - Injected properties
+    var presenter: ConverterPresenterProtocol!
     var firstContainer: UIViewController!
     var secondContainer: UIViewController!
 
     // MARK: - Outlets
     @IBOutlet private var stackView: UIStackView!
-
-    // MARK: - Public
-    func setPresenter(_ presenter: ConverterPresenterProtocol) {
-        self.presenter = presenter
-    }
 
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -36,25 +33,12 @@ final class ConverterViewController: UIViewController {
 
         firstContainer.willMove(toParent: self)
         stackView.addArrangedSubview(firstContainer.view)
-//        view.addSubview(firstContainer.view)
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            firstContainer.view.topAnchor.constraint(equalTo: view.topAnchor),
-//            firstContainer.view.leftAnchor.constraint(equalTo: view.leftAnchor),
-//            firstContainer.view.rightAnchor.constraint(equalTo: view.rightAnchor),
-//            firstContainer.view.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5),
-//        ])
         addChild(firstContainer)
 
-        secondContainer.view.backgroundColor = .blue
         secondContainer.willMove(toParent: self)
         stackView.addArrangedSubview(secondContainer.view)
         addChild(secondContainer)
-
     }
-
-    // MARK: - Private
-    private var presenter: ConverterPresenterProtocol?
 }
 
 // MARK: - ConverterViewInput

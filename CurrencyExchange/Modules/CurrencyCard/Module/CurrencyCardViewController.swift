@@ -12,36 +12,43 @@ import UIKit
 
 protocol CurrencyCardViewProtocol: class {
 
-    func setBackgroundColor(_ color: UIColor)
+    var amountText: Driver<String> { get }
+
+    func setCurrencyName(_ name: String)
+    func setAmountColor(_ color: UIColor)
 }
 
 final class CurrencyCardViewController: UIViewController {
 
     // MARK: - Outlets
+    @IBOutlet private var currencyLabel: UILabel!
+    @IBOutlet private var amountTextField: UITextField!
 
-    // MARK: - Public
-    func setPresenter(_ presenter: CurrencyCardPresenterProtocol) {
-        self.presenter = presenter
-    }
+    // MARK: - Injected properties
+    var presenter: CurrencyCardPresenterProtocol!
 
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter?.setupBindings(self)
+        presenter.setupBindings(self)
     }
 
     // MARK: - Private
-    private var presenter: CurrencyCardPresenterProtocol?
 }
 
 // MARK: - CurrencyCardViewInput
 extension CurrencyCardViewController: CurrencyCardViewProtocol {
 
-    func setupInitialState() {
+    var amountText: Driver<String> {
+        //FIXME: stored property
+        return amountTextField.rx.text.orEmpty.asDriver()
     }
 
-    func setBackgroundColor(_ color: UIColor) {
-        view.backgroundColor = color
+    func setCurrencyName(_ name: String) {
+        currencyLabel.text = name
+    }
+
+    func setAmountColor(_ color: UIColor) {
+        amountTextField.textColor = color
     }
 }
-
