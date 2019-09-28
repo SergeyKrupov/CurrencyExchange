@@ -16,24 +16,21 @@ protocol CurrencyCardPresenterProtocol {
 
 final class CurrencyCardPresenter: CurrencyCardInterface {
 
-    init(currency: Currency) {
-        self.currency = currency
+    init(interactor: CurrencyCardInteractorProtocol,
+         router: CurrencyCardRouterProtocol,
+         view: CurrencyCardViewProtocol) {
+        self.interactor = interactor
+        self.router = router
+        self.view = view
     }
 
-    // MARK: - Injected properties
-    var interactor: CurrencyCardInteractorProtocol!
-    var router: CurrencyCardRouterProtocol!
-    weak var view: CurrencyCardViewProtocol?
-
     // MARK: - CurrencyCardModuleInput
-    let currency: Currency
+    var currency: Currency {
+        return interactor.currency
+    }
 
     var amount: AnyObserver<Double> {
         return AnyObserver(amountSubject)
-    }
-
-    var balance: AnyObserver<Double> {
-        return AnyObserver(balanceSubject)
     }
 
     var rate: AnyObserver<Rate> {
@@ -45,9 +42,12 @@ final class CurrencyCardPresenter: CurrencyCardInterface {
     }
 
     // MARK: - Private
+    private let interactor: CurrencyCardInteractorProtocol
+    private let router: CurrencyCardRouterProtocol
+    private weak var view: CurrencyCardViewProtocol?
+
     private let disposeBag = DisposeBag()
     private let amountSubject = ReplaySubject<Double>.create(bufferSize: 1)
-    private let balanceSubject = ReplaySubject<Double>.create(bufferSize: 1)
     private let rateSubject = ReplaySubject<Rate>.create(bufferSize: 1)
     private let outputSubject = PublishSubject<CurrencyCardOutput>()
 }
@@ -56,25 +56,26 @@ final class CurrencyCardPresenter: CurrencyCardInterface {
 extension CurrencyCardPresenter: CurrencyCardPresenterProtocol {
 
     func setupBindings(_ view: CurrencyCardViewProtocol) {
-        view.setCurrencyName(currency.rawValue)
+        view.setCurrencyName(interactor.currency.rawValue)
 
-        let doubleValue = view.amountText
-            .map { Double($0) }
+        view.amountText
+            .bind(to: interactor.amountText)
+            .disposed(by: disposeBag)
 
-        doubleValue
+        interactor.amount
             .bind(to: Binder(self) { this, value in
                 let color: UIColor = value == nil ? .red : .black
                 this.view?.setAmountColor(color)
             })
             .disposed(by: disposeBag)
 
-        doubleValue
+        interactor.amount
             .flatMap { Observable.from(optional: $0) }
             .map(CurrencyCardOutput.init)
             .bind(to: outputSubject)
             .disposed(by: disposeBag)
 
-        balanceSubject
+        interactor.balance
             .map { [currency] in String(format: "Balance: %@%0.2f", currency.symbol, $0) }
             .bind(to: view.balanceText)
             .disposed(by: disposeBag)

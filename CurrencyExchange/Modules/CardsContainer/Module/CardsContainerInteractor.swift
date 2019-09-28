@@ -73,18 +73,8 @@ final class CardsContainerInteractor: CardsContainerInteractorProtocol {
     private let disposeBag = DisposeBag()
 
     private func bindModuleInput(_ module: CurrencyCardModule) {
-        let currency = module.interface.currency
-
         inputSubject
-            .flatMap { data in Observable.from(optional: data.balance[currency]) }
-            .bind(to: module.interface.balance)
-            .disposed(by: disposeBag)
-
-        inputSubject
-            .flatMap { data -> Observable<Rate> in
-                let rate = data.rates.first { $0.first == currency && $0.second == data.counterpart }
-                return Observable.from(optional: rate)
-            }
+            .flatMap { Observable.from(optional: $0.rate) }
             .bind(to: module.interface.rate)
             .disposed(by: disposeBag)
 

@@ -9,7 +9,7 @@
 import Moya
 import Swinject
 
-final class ExchangeRatesServiceAssembly: Assembly {
+final class CurrencyServiceAssembly: Assembly {
 
     func assemble(container: Container) {
         container.register(MoyaProvider<ExchangeRateAPI>.self) { _ in
@@ -18,8 +18,8 @@ final class ExchangeRatesServiceAssembly: Assembly {
             )
         }
 
-        container.register(ExchangeRatesService.self) { resolver in
-            ExchangeRatesServiceImpl(
+        container.register(CurrencyService.self) { resolver in
+            CurrencyServiceImpl(
                 ratesProvider: resolver.resolve(MoyaProvider<ExchangeRateAPI>.self)!,
                 timeInterval: .seconds(10)
             )

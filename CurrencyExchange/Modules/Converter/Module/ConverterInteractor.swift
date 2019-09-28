@@ -20,7 +20,8 @@ protocol ConverterInteractorProtocol: class {
 
 final class ConverterInteractor: ConverterInteractorProtocol {
 
-    init() {
+    init(currencyService: CurrencyService) {
+        self.currencyService = currencyService
         setup()
     }
 
@@ -37,8 +38,7 @@ final class ConverterInteractor: ConverterInteractorProtocol {
         return stateSubject
             .map { state in
                 CardsContainerInput(
-                    balance: state.balance,
-                    rates: state.rates ?? [],
+                    rate: state.firstRate,
                     counterpart: state.second.currency,
                     amount: state.fixedValue != .first ? state.first.amount : nil
                 )
@@ -49,8 +49,7 @@ final class ConverterInteractor: ConverterInteractorProtocol {
         return stateSubject
             .map { state in
                 CardsContainerInput(
-                    balance: state.balance,
-                    rates: state.rates ?? [],
+                    rate: state.secondRate,
                     counterpart: state.second.currency,
                     amount: state.fixedValue != .second ? state.second.amount : nil
                 )
@@ -58,6 +57,12 @@ final class ConverterInteractor: ConverterInteractorProtocol {
     }
 
     // MARK: - Private
+    private struct CurrencyPair: Equatable {
+        let first: Currency
+        let second: Currency
+    }
+
+    private let currencyService: CurrencyService
     private let disposeBag = DisposeBag()
     private let firstContainerSubject = PublishSubject<CardsContainerOutput>()
     private let secondContainerSubject = PublishSubject<CardsContainerOutput>()
@@ -82,11 +87,20 @@ final class ConverterInteractor: ConverterInteractorProtocol {
             return Bindings(subscriptions: subscriptions, events: events)
         }
 
+        let request: (ConverterState) -> CurrencyPair = { state in
+            CurrencyPair(first: state.first.currency, second: state.second.currency)
+        }
+
+        let effects: (CurrencyPair) -> Observable<ConverterEvent> = { [service = currencyService] pair in
+            service.observeRate(first: pair.first, second: pair.second)
+                .map { ConverterEvent.rateObtained($0) }
+        }
+
         Observable.system(
                 initialState: ConverterState.initialState,
                 reduce: ConverterState.reduce,
                 scheduler: MainScheduler.instance,
-                feedback: bindUI
+                feedback: bindUI, react(request: request, effects: effects)
             )
             .subscribe()
             .disposed(by: disposeBag)

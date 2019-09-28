@@ -14,13 +14,18 @@ final class CurrencyCardAssembly: Assembly {
     func assemble(container: Container) {
         container.register(CurrencyCardModule.self) { (resolver: Resolver, currency: Currency) -> CurrencyCardModule in
             let viewController = CurrencyCardViewController()
-            let interactor = CurrencyCardInteractor()
             let router = CurrencyCardRouter()
-            let presenter = CurrencyCardPresenter(currency: currency)
 
-            presenter.view = viewController
-            presenter.interactor = interactor
-            presenter.router = router
+            let interactor = CurrencyCardInteractor(
+                currency: currency,
+                profileService: resolver.resolve(ProfileService.self)!
+            )
+
+            let presenter = CurrencyCardPresenter(
+                interactor: interactor,
+                router: router,
+                view: viewController
+            )
 
             viewController.presenter = presenter
 

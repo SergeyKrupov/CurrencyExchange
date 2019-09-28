@@ -16,14 +16,24 @@ protocol ConverterPresenterProtocol {
 
 final class ConverterPresenter {
 
-    // MARK: - Injected properties
-    var interactor: ConverterInteractorProtocol!
-    var router: ConverterRouterProtocol!
-    weak var view: ConverterViewProtocol?
-    var firstContainerInterface: CardsContainerInterface!
-    var secondContainerInterface: CardsContainerInterface!
+    init(interactor: ConverterInteractorProtocol,
+         router: ConverterRouterProtocol,
+         view: ConverterViewProtocol,
+         firstContainerInterface: CardsContainerInterface,
+         secondContainerInterface: CardsContainerInterface) {
+        self.interactor = interactor
+        self.router = router
+        self.view = view
+        self.firstContainerInterface = firstContainerInterface
+        self.secondContainerInterface = secondContainerInterface
+    }
 
     // MARK: - Private
+    private let interactor: ConverterInteractorProtocol
+    private let router: ConverterRouterProtocol
+    private weak var view: ConverterViewProtocol?
+    private let firstContainerInterface: CardsContainerInterface
+    private let secondContainerInterface: CardsContainerInterface
     private let disposeBag = DisposeBag()
 }
 

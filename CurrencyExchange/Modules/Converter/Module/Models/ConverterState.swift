@@ -13,9 +13,9 @@ struct ConverterState {
     }
 
     var first: CardsContainerOutput
+    var firstRate: Rate?
     var second: CardsContainerOutput
-    var balance: [Currency: Double]
-    var rates: [Rate]?
+    var secondRate: Rate?
     var fixedValue: FixedValue?
 }
 
@@ -23,9 +23,9 @@ extension ConverterState {
 
     static let initialState = ConverterState(
         first: CardsContainerOutput(amount: 0, currency: .usd),
+        firstRate: nil,
         second: CardsContainerOutput(amount: 0, currency: .eur),
-        balance: [.eur: 100, .gbp: 100, .usd: 100],
-        rates: makeRates(),
+        secondRate: nil,
         fixedValue: nil
     )
 
@@ -40,21 +40,10 @@ extension ConverterState {
             newState.fixedValue = .second
             newState.second = input
             newState.first = CardsContainerOutput(amount: -newState.second.amount, currency: newState.first.currency)
+        case let .rateObtained(rate):
+            newState.firstRate = rate
+            newState.secondRate = rate.inverted
         }
         return newState
     }
-}
-
-//FIXME: remove
-private func makeRates() -> [Rate] {
-    let currencies: [Currency] = [.usd, .gbp, .eur]
-    var rates: [Rate] = []
-    var value: Double = 1
-    for c1 in currencies {
-        for c2 in currencies {
-            rates.append(Rate(first: c1, second: c2, rate: c1 == c2 ? 1 : value))
-            value += 0.15
-        }
-    }
-    return rates
 }

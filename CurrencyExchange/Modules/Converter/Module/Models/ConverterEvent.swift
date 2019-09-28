@@ -9,4 +9,5 @@
 enum ConverterEvent {
     case firstInput(CardsContainerOutput)
     case secondInput(CardsContainerOutput)
+    case rateObtained(Rate)
 }

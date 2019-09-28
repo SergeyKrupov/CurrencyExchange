@@ -10,8 +10,7 @@ import RxCocoa
 import RxSwift
 
 struct CardsContainerInput {
-    let balance: [Currency: Double]
-    let rates: [Rate]
+    let rate: Rate?
     let counterpart: Currency
     let amount: Double?
 }

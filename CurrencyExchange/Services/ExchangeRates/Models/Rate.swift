@@ -17,4 +17,8 @@ extension Rate {
     func toString() -> String {
         return String(format: "%@1 = %@%0.2f", first.symbol, rate, second.symbol)
     }
+
+    var inverted: Rate {
+        return Rate(first: second, second: first, rate: 1 / rate)
+    }
 }

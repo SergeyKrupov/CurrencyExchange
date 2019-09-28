@@ -17,7 +17,6 @@ protocol CurrencyCardInterface: class {
 
     var currency: Currency { get }
     var amount: AnyObserver<Double> { get }
-    var balance: AnyObserver<Double> { get }
     var rate: AnyObserver<Rate> { get }
     var output: Observable<CurrencyCardOutput> { get }
 }

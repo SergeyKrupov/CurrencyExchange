@@ -12,7 +12,11 @@ extension SwinjectStoryboard {
 
     @objc
     class func setup() {
-        ExchangeRatesServiceAssembly().assemble(container: defaultContainer)
+        // Сервисы
+        CurrencyServiceAssembly().assemble(container: defaultContainer)
+        ProfileServiceAssembly().assemble(container: defaultContainer)
+
+        // Модули
         CardsContainerAssembly().assemble(container: defaultContainer)
         ConverterAssembly().assemble(container: defaultContainer)
         CurrencyCardAssembly().assemble(container: defaultContainer)

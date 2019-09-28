@@ -17,15 +17,19 @@ final class ConverterAssembly: Assembly {
             let firstContainer = CardsContainerModule.create(resolver: resolver)
             let secondContainer = CardsContainerModule.create(resolver: resolver)
 
-            let interactor = ConverterInteractor()
-            let presenter = ConverterPresenter()
             let router = ConverterRouter()
 
-            presenter.view = viewController
-            presenter.interactor = interactor
-            presenter.router = router
-            presenter.firstContainerInterface = firstContainer.interface
-            presenter.secondContainerInterface = secondContainer.interface
+            let interactor = ConverterInteractor(
+                currencyService: resolver.resolve(CurrencyService.self)!
+            )
+
+            let presenter = ConverterPresenter(
+                interactor: interactor,
+                router: router,
+                view: viewController,
+                firstContainerInterface: firstContainer.interface,
+                secondContainerInterface: secondContainer.interface
+            )
 
             viewController.presenter = presenter
             viewController.firstContainer = firstContainer.viewController
