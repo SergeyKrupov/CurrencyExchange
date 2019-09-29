@@ -25,7 +25,7 @@ final class CardsContainerPresenter: CardsContainerInterface {
     weak var view: CardsContainerViewProtocol?
 
     // MARK: - CardsContainerModuleInput
-    var input: AnyObserver<CardsContainerInput> {
+    var input: Binder<CardsContainerInput> {
         return interactor.input
     }
     var output: Observable<CardsContainerOutput> {

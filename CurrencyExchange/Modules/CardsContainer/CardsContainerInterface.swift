@@ -21,6 +21,6 @@ struct CardsContainerOutput {
 
 protocol CardsContainerInterface: class {
 
-    var input: AnyObserver<CardsContainerInput> { get }
+    var input: Binder<CardsContainerInput> { get }
     var output: Observable<CardsContainerOutput> { get }
 }

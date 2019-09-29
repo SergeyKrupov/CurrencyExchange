@@ -12,7 +12,7 @@ import RxSwift
 protocol CardsContainerInteractorProtocol: class {
 
     var startViewController: UIViewController? { get }
-    var input: AnyObserver<CardsContainerInput> { get }
+    var input: Binder<CardsContainerInput> { get }
     var output: Observable<CardsContainerOutput> { get }
 
     func viewController(before viewContoller: UIViewController) -> UIViewController?
@@ -34,8 +34,8 @@ final class CardsContainerInteractor: CardsContainerInteractorProtocol {
         return modules.first?.viewController
     }
 
-    var input: AnyObserver<CardsContainerInput> {
-        return AnyObserver(inputSubject)
+    var input: Binder<CardsContainerInput> {
+        return inputSubject.asBinder()
     }
 
     var output: Observable<CardsContainerOutput> {

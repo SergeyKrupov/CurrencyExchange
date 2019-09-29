@@ -83,11 +83,6 @@ final class ConverterInteractor: ConverterInteractorProtocol {
     }
 
     // MARK: - Private
-    private struct CurrencyPair: Equatable {
-        let first: Currency
-        let second: Currency
-    }
-
     private let currencyService: CurrencyService
     private let profileService: ProfileService
     private let disposeBag = DisposeBag()
@@ -103,22 +98,13 @@ final class ConverterInteractor: ConverterInteractorProtocol {
             ]
 
             let events: [Signal<ConverterEvent>] = [
-                this.firstContainerRelay.map { ConverterEvent.firstInput($0) }.asSignal(onErrorSignalWith: .never()), // todo: signal?
-                this.secondContainerRelay.map { ConverterEvent.secondInput($0) }.asSignal(onErrorSignalWith: .never()),
+                this.firstContainerRelay.asSignal().map { ConverterEvent.firstInput($0) },
+                this.secondContainerRelay.asSignal().map { ConverterEvent.secondInput($0) },
                 this.makeExchangeEvent(),
                 this.observeRates()
             ]
 
             return Bindings(subscriptions: subscriptions, events: events)
-        }
-
-        // TODO: убрать дублирование
-        let request: (ConverterState) -> CurrencyPair? = { state in
-            if state.fixedValue == .second {
-                return CurrencyPair(first: state.second.currency, second: state.first.currency)
-            } else {
-                return CurrencyPair(first: state.first.currency, second: state.second.currency)
-            }
         }
 
         let effects: (CurrencyPair) -> Observable<ConverterEvent> = { [service = currencyService] pair in
@@ -130,7 +116,7 @@ final class ConverterInteractor: ConverterInteractorProtocol {
                 initialState: ConverterState.initialState,
                 reduce: ConverterState.reduce,
                 scheduler: MainScheduler.instance,
-                feedback: bindUI, react(request: request, effects: effects)
+                feedback: bindUI, react(request: obtainCurrencyPair, effects: effects)
             )
             .subscribe()
             .disposed(by: disposeBag)
@@ -138,19 +124,14 @@ final class ConverterInteractor: ConverterInteractorProtocol {
 
     private func observeRates() -> Signal<ConverterEvent> {
         return stateRelay
-            .map { state -> CurrencyPair? in
-                if state.fixedValue == .second {
-                    return CurrencyPair(first: state.second.currency, second: state.first.currency)
-                } else {
-                    return CurrencyPair(first: state.first.currency, second: state.second.currency)
-                }
-            }
+            .map(obtainCurrencyPair)
             .distinctUntilChanged()
             .flatMapLatest { [service = currencyService] pair -> Observable<ConverterEvent> in
                 guard let pair = pair else {
                     return .never()
                 }
-                return service.observeRate(first: pair.first, second: pair.second)
+                return service
+                    .observeRate(first: pair.first, second: pair.second)
                     .map { ConverterEvent.rateObtained($0) }
             }
             .asSignal(onErrorSignalWith: .never())
@@ -175,5 +156,18 @@ final class ConverterInteractor: ConverterInteractorProtocol {
                 }
             }
             .asSignal(onErrorSignalWith: .never())
+    }
+}
+
+private struct CurrencyPair: Equatable {
+    let first: Currency
+    let second: Currency
+}
+
+private func obtainCurrencyPair(_ state: ConverterState) -> CurrencyPair? {
+    if state.fixedValue == .second {
+        return CurrencyPair(first: state.second.currency, second: state.first.currency)
+    } else {
+        return CurrencyPair(first: state.first.currency, second: state.second.currency)
     }
 }

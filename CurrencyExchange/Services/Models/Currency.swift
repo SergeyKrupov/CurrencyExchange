@@ -6,7 +6,6 @@
 //  Copyright © 2019 Sergey V. Krupov. All rights reserved.
 //
 
-// TODO: Вынести в отдельную папку
 enum Currency: String, CaseIterable {
     case eur = "EUR"
     case usd = "USD"
