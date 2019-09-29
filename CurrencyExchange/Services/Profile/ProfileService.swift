@@ -28,8 +28,9 @@ extension ProfileService {
 
 final class ProfileServiceImpl: ProfileService {
 
-    init(_ balance: Balance) {
-        balanceRelay = BehaviorRelay(value: balance)
+    init(balanceStorage: BalanceStorage, defaultBalance: Balance) {
+        balanceRelay = BehaviorRelay(value: balanceStorage.load() ?? defaultBalance)
+        self.balanceStorage = balanceStorage
     }
 
     // MARK: - ProfileService
@@ -42,6 +43,7 @@ final class ProfileServiceImpl: ProfileService {
         defer { lock.unlock() }
         var balance = balanceRelay.value
         let result = block(&balance)
+        balanceStorage.store(balance)
         balanceRelay.accept(balance)
         return result
     }
@@ -49,4 +51,5 @@ final class ProfileServiceImpl: ProfileService {
     // MARK: - Private
     private let balanceRelay: BehaviorRelay<Balance>
     private let lock = NSRecursiveLock()
+    private let balanceStorage: BalanceStorage
 }

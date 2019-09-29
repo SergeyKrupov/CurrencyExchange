@@ -18,9 +18,14 @@ final class ProfileServiceAssembly: Assembly {
             return [.eur: 100, .gbp: 100, .usd: 100]
         }
 
+        container.register(BalanceStorage.self) { _ in
+            BalanceStorageImpl(userDefaults: UserDefaults.standard)
+        }
+
         container.register(ProfileService.self) { resolver in
             ProfileServiceImpl(
-                resolver.resolve(Balance.self, name: ProfileServiceAssembly.startBalanceName)!
+                balanceStorage: resolver.resolve(BalanceStorage.self)!,
+                defaultBalance: resolver.resolve(Balance.self, name: ProfileServiceAssembly.startBalanceName)!
             )
         }
     }
