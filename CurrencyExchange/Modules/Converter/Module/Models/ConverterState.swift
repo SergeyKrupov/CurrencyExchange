@@ -12,16 +12,22 @@ struct ConverterState {
         case first, second
     }
 
+    struct Notification {
+        let currency: Currency
+        let amount: Double
+    }
+
     var first: CardsContainerOutput
     var second: CardsContainerOutput
     var fixedValue: FixedValue?
     var rate: Rate?
+    var notification: Notification?
 }
 
 extension ConverterState {
 
     static let initialState = ConverterState(
-        first: CardsContainerOutput(amount: 0, currency: .usd),
+        first: CardsContainerOutput(amount: 0, currency: .eur),
         second: CardsContainerOutput(amount: 0, currency: .eur),
         fixedValue: nil,
         rate: nil
@@ -29,6 +35,8 @@ extension ConverterState {
 
     static func reduce(state: ConverterState, event: ConverterEvent) -> ConverterState {
         var newState = state
+        newState.notification = nil
+
         switch event {
         case let .firstInput(input):
             newState.fixedValue = .first
@@ -56,6 +64,15 @@ extension ConverterState {
                 newState.second.amount = -state.first.amount * rate.rate
             } else {
                 newState.first.amount = -state.second.amount * rate.rate
+            }
+        case .exchange:
+            newState.first.amount = 0
+            newState.second.amount = 0
+
+            if state.first.amount > 0 {
+                newState.notification = Notification(currency: state.first.currency, amount: state.first.amount)
+            } else {
+                newState.notification = Notification(currency: state.second.currency, amount: state.second.amount)
             }
         }
         return newState

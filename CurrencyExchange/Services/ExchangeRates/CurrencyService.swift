@@ -27,6 +27,7 @@ final class CurrencyServiceImpl: CurrencyService {
     func observeRate(first: Currency, second: Currency) -> Observable<Rate> {
         return rates.flatMap { rates -> Observable<Rate> in
             let rate = rates.first { $0.first == first && $0.second == second }
+            assert(rate != nil)
             return Observable.from(optional: rate)
         }
     }
@@ -88,7 +89,7 @@ private func prepareRates(from response: RatesResponse) -> [Rate] {
     }
 
     return pairs.reduce([]) { rates, first -> [Rate] in
-        pairs.reduce([]) { rates, second -> [Rate] in
+        pairs.reduce(rates) { rates, second -> [Rate] in
             let rate = Rate(first: first.currency, second: second.currency, rate: second.rate / first.rate)
             return rates + [rate, rate.inverted]
         }

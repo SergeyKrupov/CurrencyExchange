@@ -12,6 +12,8 @@ import UIKit
 
 protocol ConverterViewProtocol: class {
 
+    func updateTitle(_ title: String?)
+    func setExchangeEnabled(_ enabled: Bool)
 }
 
 final class ConverterViewController: UIViewController {
@@ -29,8 +31,6 @@ final class ConverterViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         presenter?.setupBindings(self)
-
-        navigationItem.title = "Converter"
     }
 
     // MARK: - Private
@@ -43,11 +43,29 @@ final class ConverterViewController: UIViewController {
         stackView.addArrangedSubview(secondContainer.view)
         addChild(secondContainer)
     }
+
+    @objc
+    private func exchangeTap(_ :Any) {
+        presenter.exchange()
+    }
 }
 
 // MARK: - ConverterViewInput
 extension ConverterViewController: ConverterViewProtocol {
 
     func setupInitialState() {
+    }
+
+    func updateTitle(_ title: String?) {
+        navigationItem.title = title
+    }
+
+    func setExchangeEnabled(_ enabled: Bool) {
+        if enabled {
+            let item = UIBarButtonItem(title: "Exchange", style: UIBarButtonItem.Style.plain, target: self, action: #selector(exchangeTap(_:)))
+            navigationItem.rightBarButtonItem = item
+        } else {
+            navigationItem.rightBarButtonItem = nil
+        }
     }
 }

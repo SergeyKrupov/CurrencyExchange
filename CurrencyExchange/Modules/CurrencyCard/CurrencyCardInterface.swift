@@ -11,11 +11,13 @@ import RxSwift
 
 protocol CurrencyCardInterface: class {
 
-    var currency: Currency { get }
-    var amount: Double { get }
-
+    // Вход:
     var amountBinder: Binder<Double> { get }
     var rateBinder: Binder<Rate> { get }
+
+    // Выход:
+    var currency: Currency { get }
+    var amount: Double { get }
 
     func observeAmount() -> Observable<Double>
 }

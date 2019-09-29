@@ -21,7 +21,7 @@ final class CurrencyServiceAssembly: Assembly {
         container.register(CurrencyService.self) { resolver in
             CurrencyServiceImpl(
                 ratesProvider: resolver.resolve(MoyaProvider<ExchangeRateAPI>.self)!,
-                timeInterval: .seconds(60 * 60) //FIXME
+                timeInterval: .seconds(10) //FIXME
             )
         }
     }

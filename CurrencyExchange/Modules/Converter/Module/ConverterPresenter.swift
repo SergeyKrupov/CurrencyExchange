@@ -12,6 +12,7 @@ import RxSwift
 protocol ConverterPresenterProtocol {
 
     func setupBindings(_ view: ConverterViewProtocol)
+    func exchange()
 }
 
 final class ConverterPresenter {
@@ -56,6 +57,22 @@ extension ConverterPresenter: ConverterPresenterProtocol {
         interactor.secondInput
             .bind(to: secondContainerInterface.input)
             .disposed(by: disposeBag)
+
+        interactor.rateObservable
+            .bind(to: Binder(self) { this, rate in
+                this.view?.updateTitle(rate.flatMap { $0.toString() })
+            })
+            .disposed(by: disposeBag)
+
+        interactor.isExchangeEnabled
+            .bind(to: Binder(self) { this, isEnabled in
+                this.view?.setExchangeEnabled(isEnabled)
+            })
+            .disposed(by: disposeBag)
+    }
+
+    func exchange() {
+        interactor.exchange()
     }
 }
 

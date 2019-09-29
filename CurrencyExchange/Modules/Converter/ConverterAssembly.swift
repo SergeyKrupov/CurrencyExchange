@@ -20,7 +20,8 @@ final class ConverterAssembly: Assembly {
             let router = ConverterRouter()
 
             let interactor = ConverterInteractor(
-                currencyService: resolver.resolve(CurrencyService.self)!
+                currencyService: resolver.resolve(CurrencyService.self)!,
+                profileService: resolver.resolve(ProfileService.self)!
             )
 
             let presenter = ConverterPresenter(
