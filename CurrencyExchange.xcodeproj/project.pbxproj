@@ -113,7 +113,6 @@
 		0CADB7E14779FA8A2DE1267C /* Converter */ = {
 			isa = PBXGroup;
 			children = (
-				49C7A715EBB11EEF895A3933 /* ConverterAssembly.swift */,
 				10B676613700183D3BD18B7C /* ConverterModuleInput.swift */,
 				A59F6F40233E8C8F005B337A /* Module */,
 			);
@@ -150,7 +149,9 @@
 		A5532831233E8598007E6BED /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				852651C7B964CBD3E295A230 /* CardsContainerAssembly.swift */,
 				420F7FD2157946A37B9114AD /* CardsContainerInteractor.swift */,
+				A553282F233E858A007E6BED /* CardsContainerModule.swift */,
 				692868ECABCDB74F49009CED /* CardsContainerPresenter.swift */,
 				0A7A396828A7A7131A01A268 /* CardsContainerRouter.swift */,
 				E7B45335B4577884B3DA7E54 /* CardsContainerViewController.swift */,
@@ -161,7 +162,9 @@
 		A57B7C48233E9340005D1EC2 /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				A5BC0869233E937100F017C5 /* CurrencyCardAssembly.swift */,
 				A57B7C4B233E9340005D1EC2 /* CurrencyCardInteractor.swift */,
+				A5BC086B233E93E400F017C5 /* CurrencyCardModule.swift */,
 				A57B7C49233E9340005D1EC2 /* CurrencyCardPresenter.swift */,
 				A57B7C4C233E9340005D1EC2 /* CurrencyCardRouter.swift */,
 				A57B7C4A233E9340005D1EC2 /* CurrencyCardViewController.swift */,
@@ -200,6 +203,7 @@
 		A59F6F40233E8C8F005B337A /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				49C7A715EBB11EEF895A3933 /* ConverterAssembly.swift */,
 				EDEA78B0771E76B8E1E17595 /* ConverterInteractor.swift */,
 				F9BBD76DE58394744EB9565A /* ConverterPresenter.swift */,
 				C2931B288277AF838318B9C4 /* ConverterRouter.swift */,
@@ -294,8 +298,6 @@
 		DFCF22D4046CA0279E4B81DA /* CurrencyCard */ = {
 			isa = PBXGroup;
 			children = (
-				A5BC0869233E937100F017C5 /* CurrencyCardAssembly.swift */,
-				A5BC086B233E93E400F017C5 /* CurrencyCardModule.swift */,
 				A57B7C4E233E9340005D1EC2 /* CurrencyCardInterface.swift */,
 				A57B7C48233E9340005D1EC2 /* Module */,
 			);
@@ -305,8 +307,6 @@
 		EB05DA2686C3728E1A4E7F47 /* CardsContainer */ = {
 			isa = PBXGroup;
 			children = (
-				852651C7B964CBD3E295A230 /* CardsContainerAssembly.swift */,
-				A553282F233E858A007E6BED /* CardsContainerModule.swift */,
 				1AAC34847E22AEBA6AF24FAB /* CardsContainerInterface.swift */,
 				A5532831233E8598007E6BED /* Module */,
 			);
