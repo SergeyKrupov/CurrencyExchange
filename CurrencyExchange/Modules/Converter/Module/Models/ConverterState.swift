@@ -12,16 +12,11 @@ struct ConverterState {
         case first, second
     }
 
-    struct Notification {
-        let currency: Currency
-        let amount: Double
-    }
-
     var first: CardsContainerOutput
     var second: CardsContainerOutput
     var fixedValue: FixedValue?
     var rate: Rate?
-    var notification: Notification?
+    var notification: ConverterNotification?
 }
 
 extension ConverterState {
@@ -65,15 +60,10 @@ extension ConverterState {
             } else {
                 newState.first.amount = -state.second.amount * rate.rate
             }
-        case .exchange:
+        case let .exchangeComplete(notification):
             newState.first.amount = 0
             newState.second.amount = 0
-
-            if state.first.amount > 0 {
-                newState.notification = Notification(currency: state.first.currency, amount: state.first.amount)
-            } else {
-                newState.notification = Notification(currency: state.second.currency, amount: state.second.amount)
-            }
+            newState.notification = notification
         }
         return newState
     }

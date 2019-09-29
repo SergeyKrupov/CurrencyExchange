@@ -12,7 +12,6 @@ import RxSwift
 protocol ConverterPresenterProtocol {
 
     func setupBindings(_ view: ConverterViewProtocol)
-    func exchange()
 }
 
 final class ConverterPresenter {
@@ -43,7 +42,7 @@ extension ConverterPresenter: ConverterPresenterProtocol {
 
     func setupBindings(_ view: ConverterViewProtocol) {
         firstContainerInterface.output
-            .subscribe(interactor.firstContainerOutput)
+            .subscribe(interactor.firstOutputBinder)
             .disposed(by: disposeBag)
 
         interactor.firstInput
@@ -51,7 +50,7 @@ extension ConverterPresenter: ConverterPresenterProtocol {
             .disposed(by: disposeBag)
 
         secondContainerInterface.output
-            .subscribe(interactor.secondContainerOutput)
+            .subscribe(interactor.secondOutputBinder)
             .disposed(by: disposeBag)
 
         interactor.secondInput
@@ -59,20 +58,40 @@ extension ConverterPresenter: ConverterPresenterProtocol {
             .disposed(by: disposeBag)
 
         interactor.rateObservable
-            .bind(to: Binder(self) { this, rate in
-                this.view?.updateTitle(rate.flatMap { $0.toString() })
-            })
+            .map { $0?.toString() }
+            .bind(to: view.titleBinder)
             .disposed(by: disposeBag)
 
         interactor.isExchangeEnabled
-            .bind(to: Binder(self) { this, isEnabled in
-                this.view?.setExchangeEnabled(isEnabled)
+            .bind(to: view.isExchangeEnabledBinder)
+            .disposed(by: disposeBag)
+
+        interactor.notification
+            .bind(to: Binder(self) { this, notification in
+                let message: String
+                switch notification {
+                case .notEnoughtMoney:
+                    message = "Not enought money"
+                case let .exchanged(balance):
+                    let balanceText = balance
+                        .map { String(format: "%@ → %0.2f", $0.key.rawValue, $0.value) }
+                        .joined(separator: "\n")
+
+                    message = """
+                        Completed
+
+                        \(balanceText)
+                    """
+                }
+                this.router.presentAlert(text: message)
             })
             .disposed(by: disposeBag)
-    }
 
-    func exchange() {
-        interactor.exchange()
+        view.exchange
+            .emit(to: Binder(self) { this, _ in
+                this.interactor.exchange()
+            })
+            .disposed(by: disposeBag)
     }
 }
 

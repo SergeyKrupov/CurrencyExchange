@@ -11,9 +11,11 @@ import RxSwift
 import UIKit
 
 protocol ConverterViewProtocol: class {
-
-    func updateTitle(_ title: String?)
-    func setExchangeEnabled(_ enabled: Bool)
+    // Вход
+    var titleBinder: Binder<String?> { get }
+    var isExchangeEnabledBinder: Binder<Bool> { get }
+    // Выход
+    var exchange: Signal<Void> { get }
 }
 
 final class ConverterViewController: UIViewController {
@@ -34,6 +36,8 @@ final class ConverterViewController: UIViewController {
     }
 
     // MARK: - Private
+    private lazy var exchangeItem = UIBarButtonItem(title: "Exchange", style: .plain, target: nil, action: nil)
+
     private func setupUI() {
         firstContainer.willMove(toParent: self)
         stackView.addArrangedSubview(firstContainer.view)
@@ -42,11 +46,8 @@ final class ConverterViewController: UIViewController {
         secondContainer.willMove(toParent: self)
         stackView.addArrangedSubview(secondContainer.view)
         addChild(secondContainer)
-    }
 
-    @objc
-    private func exchangeTap(_ :Any) {
-        presenter.exchange()
+        navigationItem.rightBarButtonItem = exchangeItem
     }
 }
 
@@ -56,16 +57,15 @@ extension ConverterViewController: ConverterViewProtocol {
     func setupInitialState() {
     }
 
-    func updateTitle(_ title: String?) {
-        navigationItem.title = title
+    var titleBinder: Binder<String?> {
+        return navigationItem.rx.title
     }
 
-    func setExchangeEnabled(_ enabled: Bool) {
-        if enabled {
-            let item = UIBarButtonItem(title: "Exchange", style: UIBarButtonItem.Style.plain, target: self, action: #selector(exchangeTap(_:)))
-            navigationItem.rightBarButtonItem = item
-        } else {
-            navigationItem.rightBarButtonItem = nil
-        }
+    var isExchangeEnabledBinder: Binder<Bool> {
+        return exchangeItem.rx.isEnabled
+    }
+
+    var exchange: Signal<Void> {
+        return exchangeItem.rx.tap.asSignal()
     }
 }

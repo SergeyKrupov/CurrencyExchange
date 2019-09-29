@@ -17,7 +17,7 @@ final class ConverterAssembly: Assembly {
             let firstContainer = CardsContainerModule.create(resolver: resolver)
             let secondContainer = CardsContainerModule.create(resolver: resolver)
 
-            let router = ConverterRouter()
+            let router = ConverterRouter(viewController: viewController)
 
             let interactor = ConverterInteractor(
                 currencyService: resolver.resolve(CurrencyService.self)!,

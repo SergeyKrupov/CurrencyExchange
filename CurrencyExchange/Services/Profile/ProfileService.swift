@@ -15,7 +15,7 @@ typealias Balance = [Currency: Double]
 protocol ProfileService {
 
     func observeBalance() -> Observable<Balance>
-    func updateBalance(block: (Balance) -> Balance)
+    func updateBalance<T>(block: (inout Balance) -> T) -> T
 }
 
 extension ProfileService {
@@ -37,11 +37,13 @@ final class ProfileServiceImpl: ProfileService {
         return balanceRelay.asObservable()
     }
 
-    func updateBalance(block: (Balance) -> Balance) {
+    func updateBalance<T>(block: (inout Balance) -> T) -> T {
         lock.lock()
         defer { lock.unlock() }
-        let newBalance = block(balanceRelay.value)
-        balanceRelay.accept(newBalance)
+        var balance = balanceRelay.value
+        let result = block(&balance)
+        balanceRelay.accept(balance)
+        return result
     }
 
     // MARK: - Private

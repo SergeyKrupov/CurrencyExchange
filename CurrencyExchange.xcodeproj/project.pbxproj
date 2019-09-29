@@ -25,6 +25,8 @@
 		A58BE7D1233E64CB004DAB62 /* DI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58BE7D0233E64CB004DAB62 /* DI.swift */; };
 		A5915C49233FA71400FF41DD /* ConverterState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5915C48233FA71400FF41DD /* ConverterState.swift */; };
 		A5915C4B233FA87700FF41DD /* ConverterEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5915C4A233FA87700FF41DD /* ConverterEvent.swift */; };
+		A591D45A2341246500725DEA /* RelayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A591D4592341246500725DEA /* RelayExtensions.swift */; };
+		A591D45C2341299700725DEA /* ConverterNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A591D45B2341299700725DEA /* ConverterNotification.swift */; };
 		A5BC086A233E937100F017C5 /* CurrencyCardAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BC0869233E937100F017C5 /* CurrencyCardAssembly.swift */; };
 		A5BC086C233E93E400F017C5 /* CurrencyCardModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BC086B233E93E400F017C5 /* CurrencyCardModule.swift */; };
 		A5BC086E233E944400F017C5 /* CurrencyCardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A5BC086D233E944400F017C5 /* CurrencyCardViewController.xib */; };
@@ -69,6 +71,8 @@
 		A58BE7D0233E64CB004DAB62 /* DI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DI.swift; sourceTree = "<group>"; };
 		A5915C48233FA71400FF41DD /* ConverterState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterState.swift; sourceTree = "<group>"; };
 		A5915C4A233FA87700FF41DD /* ConverterEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterEvent.swift; sourceTree = "<group>"; };
+		A591D4592341246500725DEA /* RelayExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayExtensions.swift; sourceTree = "<group>"; };
+		A591D45B2341299700725DEA /* ConverterNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterNotification.swift; sourceTree = "<group>"; };
 		A5BC0869233E937100F017C5 /* CurrencyCardAssembly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyCardAssembly.swift; sourceTree = "<group>"; };
 		A5BC086B233E93E400F017C5 /* CurrencyCardModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyCardModule.swift; sourceTree = "<group>"; };
 		A5BC086D233E944400F017C5 /* CurrencyCardViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CurrencyCardViewController.xib; sourceTree = "<group>"; };
@@ -177,8 +181,17 @@
 			children = (
 				A5915C48233FA71400FF41DD /* ConverterState.swift */,
 				A5915C4A233FA87700FF41DD /* ConverterEvent.swift */,
+				A591D45B2341299700725DEA /* ConverterNotification.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		A591D4582341244C00725DEA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A591D4592341246500725DEA /* RelayExtensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		A59F6F40233E8C8F005B337A /* Module */ = {
@@ -214,6 +227,7 @@
 		A5CC795B233E3C5A004DD4A2 /* CurrencyExchange */ = {
 			isa = PBXGroup;
 			children = (
+				A591D4582341244C00725DEA /* Extensions */,
 				A58BE7CF233E64C0004DAB62 /* DI */,
 				48C75C26901CC780C162FE98 /* Modules */,
 				A5CC7971233E52DF004DD4A2 /* Services */,
@@ -426,7 +440,9 @@
 				A5CC7974233E531F004DD4A2 /* CurrencyService.swift in Sources */,
 				A5CC7976233E5347004DD4A2 /* CurrencyServiceAssembly.swift in Sources */,
 				A5CA9085233F61D60083D80C /* Rate.swift in Sources */,
+				A591D45A2341246500725DEA /* RelayExtensions.swift in Sources */,
 				A5CC795D233E3C5A004DD4A2 /* AppDelegate.swift in Sources */,
+				A591D45C2341299700725DEA /* ConverterNotification.swift in Sources */,
 				A5CC797F233E5B90004DD4A2 /* RatesResponse.swift in Sources */,
 				A5250305233FD8AD00F3918B /* ProfileService.swift in Sources */,
 				A5CC795F233E3C5A004DD4A2 /* SceneDelegate.swift in Sources */,

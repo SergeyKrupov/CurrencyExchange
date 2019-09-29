@@ -12,13 +12,14 @@ import RxSwift
 
 protocol ConverterInteractorProtocol: class {
 
-    var firstContainerOutput: AnyObserver<CardsContainerOutput> { get }
-    var secondContainerOutput: AnyObserver<CardsContainerOutput> { get }
+    var firstOutputBinder: Binder<CardsContainerOutput> { get }
+    var secondOutputBinder: Binder<CardsContainerOutput> { get }
     var firstInput: Observable<CardsContainerInput> { get }
     var secondInput: Observable<CardsContainerInput> { get }
 
     var rateObservable: Observable<Rate?> { get }
     var isExchangeEnabled: Observable<Bool> { get }
+    var notification: Observable<ConverterNotification> { get }
 
     func exchange()
 }
@@ -32,12 +33,12 @@ final class ConverterInteractor: ConverterInteractorProtocol {
     }
 
     // MARK: - ConverterInteractorProtocol
-    var firstContainerOutput: AnyObserver<CardsContainerOutput> {
-        return AnyObserver(firstContainerSubject)
+    var firstOutputBinder: Binder<CardsContainerOutput> {
+        return firstContainerRelay.asBinder()
     }
 
-    var secondContainerOutput: AnyObserver<CardsContainerOutput> {
-        return AnyObserver(secondContainerSubject)
+    var secondOutputBinder: Binder<CardsContainerOutput> {
+        return secondContainerRelay.asBinder()
     }
 
     var firstInput: Observable<CardsContainerInput> {
@@ -72,6 +73,11 @@ final class ConverterInteractor: ConverterInteractorProtocol {
             }
     }
 
+    var notification: Observable<ConverterNotification> {
+        return stateRelay
+            .flatMap { Observable.from(optional: $0.notification) }
+    }
+
     func exchange() {
         exchangeRelay.accept(())
     }
@@ -85,30 +91,21 @@ final class ConverterInteractor: ConverterInteractorProtocol {
     private let currencyService: CurrencyService
     private let profileService: ProfileService
     private let disposeBag = DisposeBag()
-    private let firstContainerSubject = PublishSubject<CardsContainerOutput>()
-    private let secondContainerSubject = PublishSubject<CardsContainerOutput>()
+    private let firstContainerRelay = PublishRelay<CardsContainerOutput>()
+    private let secondContainerRelay = PublishRelay<CardsContainerOutput>()
     private let exchangeRelay = PublishRelay<Void>()
     private let stateRelay = BehaviorRelay<ConverterState>(value: .initialState)
 
     private func setup() {
-
-        let exchangeEvent = exchangeRelay
-            .withLatestFrom(Observable.combineLatest(profileService.observeBalance(), stateRelay.asObservable()))
-            .flatMap { tuple -> Observable<ConverterEvent> in
-                let (balance, state) = tuple
-                return .never()
-            }
-            .asSignal(onErrorSignalWith: .never())
-
         let bindUI: (ObservableSchedulerContext<ConverterState>) -> Observable<ConverterEvent> = bind(self) { this, state in
             let subscriptions: [Disposable] = [
                 state.bind(to: this.stateRelay)
             ]
 
             let events: [Signal<ConverterEvent>] = [
-                this.firstContainerSubject.map { ConverterEvent.firstInput($0) }.asSignal(onErrorSignalWith: .never()), // todo: signal?
-                this.secondContainerSubject.map { ConverterEvent.secondInput($0) }.asSignal(onErrorSignalWith: .never()),
-                exchangeEvent,
+                this.firstContainerRelay.map { ConverterEvent.firstInput($0) }.asSignal(onErrorSignalWith: .never()), // todo: signal?
+                this.secondContainerRelay.map { ConverterEvent.secondInput($0) }.asSignal(onErrorSignalWith: .never()),
+                this.makeExchangeEvent(),
                 this.observeRates()
             ]
 
@@ -155,6 +152,27 @@ final class ConverterInteractor: ConverterInteractorProtocol {
                 }
                 return service.observeRate(first: pair.first, second: pair.second)
                     .map { ConverterEvent.rateObtained($0) }
+            }
+            .asSignal(onErrorSignalWith: .never())
+    }
+
+    private func makeExchangeEvent() -> Signal<ConverterEvent> {
+        return exchangeRelay
+            .withLatestFrom(stateRelay)
+            .flatMap { [profileService] state -> Observable<ConverterEvent> in
+                return profileService.updateBalance { balance -> Observable<ConverterEvent> in
+                    guard let first = balance[state.first.currency], let second = balance[state.second.currency] else {
+                        return .empty()
+                    }
+
+                    if first + state.first.amount < 0 || second + state.second.amount < 0 {
+                        return .just(.exchangeComplete(.notEnoughtMoney))
+                    }
+
+                    balance[state.first.currency] = first + state.first.amount
+                    balance[state.second.currency] = second + state.second.amount
+                    return .just(.exchangeComplete(.exchanged(balance)))
+                }
             }
             .asSignal(onErrorSignalWith: .never())
     }
