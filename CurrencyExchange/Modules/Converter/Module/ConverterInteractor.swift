@@ -38,7 +38,6 @@ final class ConverterInteractor: ConverterInteractorProtocol {
         return stateSubject
             .map { state in
                 CardsContainerInput(
-                    rate: state.firstRate,
                     counterpart: state.second.currency,
                     amount: state.fixedValue != .first ? state.first.amount : nil
                 )
@@ -49,7 +48,6 @@ final class ConverterInteractor: ConverterInteractorProtocol {
         return stateSubject
             .map { state in
                 CardsContainerInput(
-                    rate: state.secondRate,
                     counterpart: state.second.currency,
                     amount: state.fixedValue != .second ? state.second.amount : nil
                 )
@@ -88,7 +86,11 @@ final class ConverterInteractor: ConverterInteractorProtocol {
         }
 
         let request: (ConverterState) -> CurrencyPair = { state in
-            CurrencyPair(first: state.first.currency, second: state.second.currency)
+            if state.fixedValue == .second {
+                return CurrencyPair(first: state.second.currency, second: state.first.currency)
+            } else {
+                return CurrencyPair(first: state.first.currency, second: state.second.currency)
+            }
         }
 
         let effects: (CurrencyPair) -> Observable<ConverterEvent> = { [service = currencyService] pair in

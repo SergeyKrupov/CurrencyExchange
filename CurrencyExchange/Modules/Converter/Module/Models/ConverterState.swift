@@ -13,20 +13,18 @@ struct ConverterState {
     }
 
     var first: CardsContainerOutput
-    var firstRate: Rate?
     var second: CardsContainerOutput
-    var secondRate: Rate?
     var fixedValue: FixedValue?
+    var rate: Rate?
 }
 
 extension ConverterState {
 
     static let initialState = ConverterState(
         first: CardsContainerOutput(amount: 0, currency: .usd),
-        firstRate: nil,
         second: CardsContainerOutput(amount: 0, currency: .eur),
-        secondRate: nil,
-        fixedValue: nil
+        fixedValue: nil,
+        rate: nil
     )
 
     static func reduce(state: ConverterState, event: ConverterEvent) -> ConverterState {
@@ -35,14 +33,30 @@ extension ConverterState {
         case let .firstInput(input):
             newState.fixedValue = .first
             newState.first = input
-            newState.second = CardsContainerOutput(amount: -newState.first.amount, currency: newState.second.currency)
+
+            let rate = state.rate?.rate ?? 0
+            newState.second.amount = -input.amount * rate
+
+            if state.first.currency != input.currency { // Обновление курса, если поменялась валюта
+                newState.rate = nil
+            }
         case let .secondInput(input):
             newState.fixedValue = .second
             newState.second = input
-            newState.first = CardsContainerOutput(amount: -newState.second.amount, currency: newState.first.currency)
+
+            let rate = state.rate?.rate ?? 0
+            newState.first.amount = -input.amount * rate
+
+            if state.second.currency != input.currency { // Обновление курса, если поменялась валюта
+                newState.rate = nil
+            }
         case let .rateObtained(rate):
-            newState.firstRate = rate
-            newState.secondRate = rate.inverted
+            newState.rate = rate
+            if state.fixedValue != .second {
+                newState.second.amount = -state.first.amount * rate.rate
+            } else {
+                newState.first.amount = -state.second.amount * rate.rate
+            }
         }
         return newState
     }

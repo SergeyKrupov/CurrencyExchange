@@ -18,7 +18,10 @@ final class CardsContainerAssembly: Assembly {
             let usdModule = CurrencyCardModule.create(resolver: resolver, currency: .usd)
 
             let viewController = CardsContainerViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
-            let interactor = CardsContainerInteractor(modules: [eurModule, usdModule, gbpModule])
+            let interactor = CardsContainerInteractor(
+                modules: [eurModule, usdModule, gbpModule],
+                currencyService: resolver.resolve(CurrencyService.self)!
+            )
             let presenter = CardsContainerPresenter()
             let router = CardsContainerRouter()
 

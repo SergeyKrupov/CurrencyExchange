@@ -10,14 +10,13 @@ import RxCocoa
 import RxSwift
 
 struct CardsContainerInput {
-    let rate: Rate?
     let counterpart: Currency
     let amount: Double?
 }
 
 struct CardsContainerOutput {
-    let amount: Double
-    let currency: Currency
+    var amount: Double
+    var currency: Currency
 }
 
 protocol CardsContainerInterface: class {

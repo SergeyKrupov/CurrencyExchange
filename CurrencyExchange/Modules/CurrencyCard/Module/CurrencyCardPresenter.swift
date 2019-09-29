@@ -29,16 +29,22 @@ final class CurrencyCardPresenter: CurrencyCardInterface {
         return interactor.currency
     }
 
-    var amount: AnyObserver<Double> {
-        return AnyObserver(amountSubject)
+    var amount: Double {
+        return interactor.amount
     }
 
-    var rate: AnyObserver<Rate> {
-        return AnyObserver(rateSubject)
+    var rateBinder: Binder<Rate> {
+        return Binder(rateRelay) { relay, value in
+            relay.accept(value)
+        }
     }
 
-    var output: Observable<CurrencyCardOutput> {
-        return outputSubject.asObservable()
+    var amountBinder: Binder<Double> {
+        return interactor.amountValueBinder
+    }
+
+    func observeAmount() -> Observable<Double> {
+        return interactor.observeAmount(isChangedByUser: true)
     }
 
     // MARK: - Private
@@ -47,9 +53,7 @@ final class CurrencyCardPresenter: CurrencyCardInterface {
     private weak var view: CurrencyCardViewProtocol?
 
     private let disposeBag = DisposeBag()
-    private let amountSubject = ReplaySubject<Double>.create(bufferSize: 1)
-    private let rateSubject = ReplaySubject<Rate>.create(bufferSize: 1)
-    private let outputSubject = PublishSubject<CurrencyCardOutput>()
+    private let rateRelay = BehaviorRelay<Rate?>(value: nil)
 }
 
 // MARK: - CurrencyCardPesenterProtocol
@@ -59,20 +63,14 @@ extension CurrencyCardPresenter: CurrencyCardPresenterProtocol {
         view.setCurrencyName(interactor.currency.rawValue)
 
         view.amountText
-            .bind(to: interactor.amountText)
+            .bind(to: interactor.amountTextBinder)
             .disposed(by: disposeBag)
 
-        interactor.amount
+        interactor.isAmountCorrect
             .bind(to: Binder(self) { this, value in
-                let color: UIColor = value == nil ? .red : .black
+                let color: UIColor = value ? .black : .red
                 this.view?.setAmountColor(color)
             })
-            .disposed(by: disposeBag)
-
-        interactor.amount
-            .flatMap { Observable.from(optional: $0) }
-            .map(CurrencyCardOutput.init)
-            .bind(to: outputSubject)
             .disposed(by: disposeBag)
 
         interactor.balance
@@ -80,12 +78,12 @@ extension CurrencyCardPresenter: CurrencyCardPresenterProtocol {
             .bind(to: view.balanceText)
             .disposed(by: disposeBag)
 
-        rateSubject
-            .map { $0.toString() }
+        rateRelay
+            .flatMap { Observable.from(optional: $0?.toString()) }
             .bind(to: view.rateText)
             .disposed(by: disposeBag)
 
-        amountSubject
+        interactor.observeAmount(isChangedByUser: false)
             .map { String(format: "%0.2f", $0) }
             .bind(to: view.amountText)
             .disposed(by: disposeBag)

@@ -63,18 +63,34 @@ final class CurrencyServiceImpl: CurrencyService {
                 obtainRates.asMaybe()
                     .catchError { _ in .empty() }
             }
-            .map { response -> [Rate] in
-                guard let first = Currency(rawValue: response.base) else {
-                    return []
+            .map(prepareRates)
+            .do(onNext: { rates in
+                // Чтобы убедиться в том, что курсы обновляются
+                #if false
+                debugPrint("Обновление курсов:")
+                for rate in rates {
+                    debugPrint(rate.toString())
                 }
-                return response.rates.flatMap { tuple -> [Rate] in
-                    guard let second = Currency(rawValue: tuple.key) else {
-                        return []
-                    }
-                    let rate = Rate(first: first, second: second, rate: tuple.value)
-                    return [rate, rate.inverted]
-                }
-            }
+                debugPrint("-----------------")
+                #endif
+            })
             .share(replay: 1, scope: .whileConnected)
+    }
+}
+
+private func prepareRates(from response: RatesResponse) -> [Rate] {
+    var pairs = response.rates.compactMap { tuple -> (currency: Currency, rate: Double)? in
+        Currency(rawValue: tuple.key).flatMap { (currency: $0, rate: tuple.value) }
+    }
+
+    if let currency = Currency(rawValue: response.base) {
+        pairs.append((currency: currency, rate: 1))
+    }
+
+    return pairs.reduce([]) { rates, first -> [Rate] in
+        pairs.reduce([]) { rates, second -> [Rate] in
+            let rate = Rate(first: first.currency, second: second.currency, rate: second.rate / first.rate)
+            return rates + [rate, rate.inverted]
+        }
     }
 }

@@ -22,9 +22,10 @@ protocol CardsContainerInteractorProtocol: class {
 
 final class CardsContainerInteractor: CardsContainerInteractorProtocol {
 
-    init(modules: [CurrencyCardModule]) {
+    init(modules: [CurrencyCardModule], currencyService: CurrencyService) {
         self.modules = modules
-        modules.forEach(bindModuleInput)
+        self.currencyService = currencyService
+        bindModulesInput()
         bindModulesOutput()
     }
 
@@ -61,37 +62,44 @@ final class CardsContainerInteractor: CardsContainerInteractorProtocol {
         guard let index = modules.firstIndex(where: { $0.viewController == viewController }) else {
             return
         }
-        activeModuleIndex = index
+        activeModuleIndex.accept(index)
     }
 
     // MARK: - Private
     private let modules: [CurrencyCardModule]
+    private let currencyService: CurrencyService
     private let inputSubject = ReplaySubject<CardsContainerInput>.create(bufferSize: 1)
     private let outputSubject = PublishSubject<CardsContainerOutput>()
 
-    private var activeModuleIndex: Int = 0
+    private var activeModuleIndex = BehaviorRelay(value: 0)
     private let disposeBag = DisposeBag()
 
-    private func bindModuleInput(_ module: CurrencyCardModule) {
-        inputSubject
-            .flatMap { Observable.from(optional: $0.rate) }
-            .bind(to: module.interface.rate)
-            .disposed(by: disposeBag)
+    private func bindModulesInput() {
+        for module in modules {
+            let currency = module.interface.currency
 
-        inputSubject
-            .flatMap { Observable.from(optional: $0.amount) }
-            .bind(to: module.interface.amount)
-            .disposed(by: disposeBag)
+            inputSubject
+                .flatMap { [service = currencyService] in service.observeRate(first: currency, second: $0.counterpart) }
+                .bind(to: module.interface.rateBinder)
+                .disposed(by: disposeBag)
+
+            inputSubject
+                .flatMap { Observable.from(optional: $0.amount) }
+                .bind(to: module.interface.amountBinder)
+                .disposed(by: disposeBag)
+        }
     }
 
     private func bindModulesOutput() {
-        let observables = modules.map { module -> Observable<CardsContainerOutput> in
-            let currency = module.interface.currency
-            return module.interface.output
-                .map { CardsContainerOutput(amount: $0.amount, currency: currency) }
-        }
-
-        Observable.merge(observables)
+        activeModuleIndex
+            .flatMapLatest { [modules] index -> Observable<CardsContainerOutput> in
+                let module = modules[index]
+                let currency = module.interface.currency
+                let amount = module.interface.amount
+                return module.interface.observeAmount()
+                    .startWith(amount)
+                    .map { CardsContainerOutput(amount: $0, currency: currency) }
+            }
             .bind(to: outputSubject)
             .disposed(by: disposeBag)
     }
