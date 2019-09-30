@@ -89,7 +89,7 @@ final class ConverterInteractor: ConverterInteractorProtocol {
     private let firstContainerRelay = PublishRelay<CardsContainerOutput>()
     private let secondContainerRelay = PublishRelay<CardsContainerOutput>()
     private let exchangeRelay = PublishRelay<Void>()
-    private let stateRelay = BehaviorRelay<ConverterState>(value: .initialState)
+    private let stateRelay = BehaviorRelay<ConverterState>(value: .initial)
 
     private func setup() {
         let bindUI: (ObservableSchedulerContext<ConverterState>) -> Observable<ConverterEvent> = bind(self) { this, state in
@@ -113,7 +113,7 @@ final class ConverterInteractor: ConverterInteractorProtocol {
         }
 
         Observable.system(
-                initialState: ConverterState.initialState,
+                initialState: ConverterState.initial,
                 reduce: ConverterState.reduce,
                 scheduler: MainScheduler.instance,
                 feedback: bindUI, react(request: obtainCurrencyPair, effects: effects)

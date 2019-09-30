@@ -48,6 +48,8 @@ final class CurrencyCardViewController: UIViewController {
         layer.shadowOpacity = 0.8
         layer.shadowRadius = 3
         layer.shadowOffset = CGSize(width: 2, height: 2)
+
+        rateLabel.text = nil
     }
 }
 

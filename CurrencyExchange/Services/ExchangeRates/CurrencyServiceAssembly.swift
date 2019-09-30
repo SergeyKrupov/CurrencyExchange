@@ -14,6 +14,10 @@ final class CurrencyServiceAssembly: Assembly {
     func assemble(container: Container) {
         container.register(MoyaProvider<ExchangeRateAPI>.self) { _ in
             MoyaProvider<ExchangeRateAPI>(
+                // FIXME
+                // Примечание:
+                // с моего компьютера не удаются достучаться до https://api.exchangeratesapi.io/latest поэтому устанавливаю
+                // прокси. Если до вышеуказанного есть доступ без прокси, то следующую строчку можно убрать
                 manager: createManager()
             )
         }
@@ -27,7 +31,7 @@ final class CurrencyServiceAssembly: Assembly {
     }
 }
 
-// FIXME: https://api.exchangeratesapi.io/latest не открывается без прокси
+// Workaround (не часть тестового задания)
 private func createManager() -> Manager {
     let configuration = URLSessionConfiguration.default
     configuration.httpAdditionalHeaders = Manager.defaultHTTPHeaders

@@ -21,7 +21,7 @@ struct ConverterState {
 
 extension ConverterState {
 
-    static let initialState = ConverterState(
+    static let initial = ConverterState(
         first: CardsContainerOutput(amount: 0, currency: .eur),
         second: CardsContainerOutput(amount: 0, currency: .eur),
         fixedValue: nil,

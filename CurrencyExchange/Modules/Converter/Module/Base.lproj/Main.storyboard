@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="f6a-Py-k35">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Converter View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ConverterViewController" customModule="CurrencyExchange" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GAG-6W-GuS">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="X7X-nF-UzL">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="400"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="400" id="SqY-W5-JAn"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="X7X-nF-UzL" secondAttribute="trailing" id="Cpe-W8-2U2"/>
+                                    <constraint firstAttribute="bottom" secondItem="X7X-nF-UzL" secondAttribute="bottom" id="Hjg-5A-AoN"/>
+                                    <constraint firstItem="X7X-nF-UzL" firstAttribute="leading" secondItem="GAG-6W-GuS" secondAttribute="leading" id="hPz-4u-hAJ"/>
+                                    <constraint firstItem="X7X-nF-UzL" firstAttribute="top" secondItem="GAG-6W-GuS" secondAttribute="top" id="xHZ-EH-YA1"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="GAG-6W-GuS" secondAttribute="bottom" id="MoS-8W-Av6"/>
+                            <constraint firstAttribute="trailing" secondItem="GAG-6W-GuS" secondAttribute="trailing" id="bgs-kC-f0O"/>
+                            <constraint firstItem="GAG-6W-GuS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="iDq-wi-DrB"/>
+                            <constraint firstItem="GAG-6W-GuS" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="vgf-Jw-Zg3"/>
+                            <constraint firstItem="X7X-nF-UzL" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="wiX-sY-3dE"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="NRT-am-Ofl"/>
+                    <connections>
+                        <outlet property="stackView" destination="X7X-nF-UzL" id="keI-WT-qKI"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1042.0289855072465" y="138.61607142857142"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="OPU-4Q-2TY">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="f6a-Py-k35" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="1lw-23-ctc">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="zaT-3s-3TG"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zt8-HM-1Zb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="131.8840579710145" y="138.61607142857142"/>
+        </scene>
+    </scenes>
+</document>

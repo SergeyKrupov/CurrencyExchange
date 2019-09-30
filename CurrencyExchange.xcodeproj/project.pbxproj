@@ -155,7 +155,6 @@
 				A5CEE2092341BE30000E5F3C /* Modules */,
 				A5CEE1FA2341BE30000E5F3C /* Services */,
 				A5CEE1E32341BD17000E5F3C /* AppDelegate.swift */,
-				A5CEE1E72341BD17000E5F3C /* Main.storyboard */,
 				A5CEE1EA2341BD18000E5F3C /* Assets.xcassets */,
 				A5CEE1EC2341BD18000E5F3C /* LaunchScreen.storyboard */,
 				A5CEE1EF2341BD18000E5F3C /* Info.plist */,
@@ -251,6 +250,7 @@
 		A5CEE20C2341BE30000E5F3C /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				A5CEE1E72341BD17000E5F3C /* Main.storyboard */,
 				A5CEE20D2341BE30000E5F3C /* ConverterViewController.swift */,
 				A5CEE20E2341BE30000E5F3C /* ConverterRouter.swift */,
 				A5CEE20F2341BE30000E5F3C /* ConverterAssembly.swift */,
