@@ -25,7 +25,8 @@ extension ConverterState {
         first: CardsContainerOutput(amount: 0, currency: .eur),
         second: CardsContainerOutput(amount: 0, currency: .eur),
         fixedValue: nil,
-        rate: nil
+        rate: nil,
+        notification: nil
     )
 
     static func reduce(state: ConverterState, event: ConverterEvent) -> ConverterState {
