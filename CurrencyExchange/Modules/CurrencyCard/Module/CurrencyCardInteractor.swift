@@ -50,6 +50,8 @@ final class CurrencyCardInteractor: CurrencyCardInteractorProtocol {
             if let value = Double(text) {
                 this.isAmountCorrectRelay.accept(true)
                 this.amountRelay.accept(Amount(value: value, updatedByUser: true))
+            } else {
+                this.isAmountCorrectRelay.accept(false)
             }
         }
     }
