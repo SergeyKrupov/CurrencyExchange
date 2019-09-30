@@ -14,6 +14,7 @@ protocol CurrencyCardViewProtocol: class {
 
     var balanceText: Binder<String?> { get }
     var rateText: Binder<String?> { get }
+    var isActivityIndicatorHidden: Binder<Bool> { get }
     var amountText: ControlProperty<String> { get }
 
     func setCurrencyName(_ name: String)
@@ -28,7 +29,8 @@ final class CurrencyCardViewController: UIViewController {
     @IBOutlet private var balanceLabel: UILabel!
     @IBOutlet private var rateLabel: UILabel!
     @IBOutlet private var containerView: UIView!
-
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    
     // MARK: - Injected properties
     var presenter: CurrencyCardPresenterProtocol!
 
@@ -62,6 +64,10 @@ extension CurrencyCardViewController: CurrencyCardViewProtocol {
 
     var rateText: Binder<String?> {
         return rateLabel.rx.text
+    }
+
+    var isActivityIndicatorHidden: Binder<Bool> {
+        return activityIndicator.rx.isHidden
     }
 
     var amountText: ControlProperty<String> {

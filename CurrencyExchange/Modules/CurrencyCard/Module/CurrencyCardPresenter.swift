@@ -83,6 +83,11 @@ extension CurrencyCardPresenter: CurrencyCardPresenterProtocol {
             .bind(to: view.rateText)
             .disposed(by: disposeBag)
 
+        rateRelay
+            .map { $0 != nil }
+            .bind(to: view.isActivityIndicatorHidden)
+            .disposed(by: disposeBag)
+
         interactor.observeAmount(isChangedByUser: false)
             .map { String(format: "%0.2f", $0) }
             .bind(to: view.amountText)
