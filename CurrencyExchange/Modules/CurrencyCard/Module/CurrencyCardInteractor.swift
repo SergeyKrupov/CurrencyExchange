@@ -51,7 +51,7 @@ final class CurrencyCardInteractor: CurrencyCardInteractorProtocol {
                 this.isAmountCorrectRelay.accept(true)
                 this.amountRelay.accept(Amount(value: value, updatedByUser: true))
             } else {
-                this.isAmountCorrectRelay.accept(false)
+                this.isAmountCorrectRelay.accept(text.isEmpty)
             }
         }
     }
